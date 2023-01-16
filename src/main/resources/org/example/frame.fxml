@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.FrameController">
+   <left>
+      <VBox fx:id="menu" prefHeight="355.0" prefWidth="172.0" style="-fx-background-color: #5c6b51;" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="inputvalues" mnemonicParsing="false" onMouseClicked="#toInputValues" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent;" text="Input Values" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@pictures/File.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="monitoring" mnemonicParsing="false" onMouseClicked="#toMonitoring" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 0.5px 0px;" text="Monitoring" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@pictures/diagram.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="temperature" mnemonicParsing="false" onMouseClicked="#toTemperature" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent;" text="Temperature" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@pictures/Thermometer.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </VBox>
+   </left>
+   <top>
+      <HBox prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: #3F4739;" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#shrinkMenu" prefHeight="53.0" prefWidth="76.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="45.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@pictures/dots.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <Pane fx:id="sidepane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

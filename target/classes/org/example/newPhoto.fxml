@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<DialogPane prefHeight="235.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.NewPhotoController">
+   <header>
+      <TilePane style="-fx-background-color: #3F4739;">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-background-color: #3F4739;" text="Upload a picture of your cell culture in .png .jpg etc." wrappingWidth="430.36201095581055">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+         </children>
+      </TilePane>
+   </header>
+   <content>
+      <AnchorPane prefHeight="209.0" prefWidth="439.0">
+         <children>
+            <VBox layoutX="240.0" prefHeight="259.0" prefWidth="197.0">
+               <children>
+                  <Label fx:id="fileNamePanel" prefHeight="154.0" prefWidth="198.0" style="-fx-border-color: #5c6b51; -fx-background-color: white;" text="No file selected" textFill="#bababa">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select a photo:" wrappingWidth="135.3638916015625" />
+                        <Button mnemonicParsing="false" onAction="#selectFile" prefHeight="28.0" prefWidth="64.0" style="-fx-background-color: white; -fx-border-color: #5c6b51; -fx-text-fill: #5c6b51;" text="Select" textAlignment="CENTER" textFill="#5c6b51">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Photo was taken at time:" wrappingWidth="136.88543701171875" />
+                        <TextField fx:id="timeInput" prefHeight="28.0" prefWidth="64.0" style="-fx-border-color: #5c6b51; -fx-border-width: 0.3px;" />
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fx:id="hbox_phototype" alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Photo is of type:" />
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="71.0" prefWidth="197.0">
+                     <children>
+                        <Button mnemonicParsing="false" onMouseClicked="#discard" style="-fx-background-color: white; -fx-border-color: #3F4739;" text="Discard" />
+                        <Button mnemonicParsing="false" onMouseClicked="#save" style="-fx-background-color: #5c6b51; -fx-border-color: #5c6b51;" text="Save" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <AnchorPane layoutX="25.0" layoutY="20.0" prefHeight="142.0" prefWidth="176.0" style="-fx-background-color: white; -fx-border-color: #5c6b51;">
+               <children>
+                  <ImageView fx:id="fotodepictor" fitHeight="130.0" fitWidth="195.0" layoutX="-9.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #5c6b51;" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </content>
+</DialogPane>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.SidePaneController">
+   <center>
+      <LineChart fx:id="chartMonitoring" title="Your cells are growing!" BorderPane.alignment="CENTER">
+        <xAxis>
+          <CategoryAxis label="Time" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis label="Confluency" side="LEFT" upperBound="90.0" />
+        </yAxis>
+         <BorderPane.margin>
+            <Insets top="30.0" />
+         </BorderPane.margin>
+      </LineChart>
+   </center>
+</BorderPane>
