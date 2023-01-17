@@ -91,7 +91,7 @@ public class InputValuesController{
         System.out.println("Inside initialize Table");
         CheckBox cb = new CheckBox();
         ImageView iv = new ImageView();
-        Image image = new Image(file.toURI().toString());
+        Image image = new Image(file.toURI().toString(), 50, 50, false, false);
         iv.setImage(image);
         Row row = new Row(filename, time, type, iv, cb);
         cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
@@ -101,7 +101,8 @@ public class InputValuesController{
         table.getItems().clear();
         table.getItems().addAll(listRows);
         // Wirft Fehler, sobald mehrere Bilder geadded, daher auskommentiert
-        //Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
+        Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
+        System.out.println(measure.getConf());
         //GrowthContainer container = GrowthContainer.instance();
         //container.addMeasure(measure);
         stage.close();

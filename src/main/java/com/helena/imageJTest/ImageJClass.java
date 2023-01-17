@@ -31,15 +31,9 @@ public class ImageJClass {
 		ImageProcessor imageP = image.getProcessor();
 		// Substract Background
 		BackgroundSubtracter backgroundSubtracter = new BackgroundSubtracter();
-		backgroundSubtracter.rollingBallBackground(imageP, 90, false, true, false,false, false);
-		ImagePlus testdisplay = new ImagePlus("Result Substracted Background", imageP);
-		// Apply Median Filter
-		RankFilters rankFilters = new RankFilters();
-		rankFilters.rank(imageP, 5, MEDIAN);
-		testdisplay = new ImagePlus("Result Median Filter", imageP);
+		backgroundSubtracter.rollingBallBackground(imageP, 5, false, true, false,false, false);
 		// Apply Threshold
-		imageP.setAutoThreshold(AutoThresholder.Method.valueOf("IsoData"), true, BLACK_AND_WHITE_LUT);
-		testdisplay = new ImagePlus(" Result Threshold", imageP);
+		imageP.setThreshold(0, 246, 0);
 		// Analyze
 		ImagePlus picAnalyze = new ImagePlus("Picture Analyze", imageP);
 		ResultsTable resultsTable = new ResultsTable();
