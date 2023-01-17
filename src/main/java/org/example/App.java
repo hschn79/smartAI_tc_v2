@@ -4,13 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -46,31 +42,19 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("frame"));
         Pane pane = (Pane) scene.lookup("#sidepane");
-        Parent sidePane = loadFXML("sidepane");
+        Parent sidePane = loadFXML("inputValues");
         pane.getChildren().add(sidePane);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
-    public static void enlargeMenu(){
-        VBox menu = (VBox) scene.lookup("#menu");
-        Button inputValues = (Button) scene.lookup("#inputvalues");
-        Button monitoring = (Button) scene.lookup("#monitoring");
-        Button temperature = (Button) scene.lookup("#temperature");
-        inputValues.setText("Input Values");
-        monitoring.setText("Monitoring");
-        temperature.setText("Temperature");
-        menu.setPrefSize(172, 355);
-    }
 
     public static void main(String[] args) {
 		launch();

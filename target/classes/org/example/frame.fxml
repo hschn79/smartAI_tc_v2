@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,13 +10,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="805.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.FrameController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="805.0" stylesheets="@css/frameStyle.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.FrameController">
    <left>
       <VBox fx:id="menu" prefHeight="355.0" prefWidth="172.0" style="-fx-background-color: #5c6b51;" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="inputvalues" mnemonicParsing="false" onMouseClicked="#toInputValues" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent;" text="Input Values" textFill="WHITE">
+            <ToggleButton id="menuButton" fx:id="inputvalues" mnemonicParsing="false" onMouseClicked="#toInputValues" prefHeight="77.0" prefWidth="204.0" text="Input Values">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -23,11 +23,8 @@
                      </image>
                   </ImageView>
                </graphic>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="monitoring" mnemonicParsing="false" onMouseClicked="#toMonitoring" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 0.5px 0px;" text="Monitoring" textFill="WHITE">
+            </ToggleButton>
+            <ToggleButton id="menuButton" fx:id="monitoring" mnemonicParsing="false" onMouseClicked="#toMonitoring" prefHeight="77.0" prefWidth="204.0" text="Monitoring">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -35,11 +32,8 @@
                      </image>
                   </ImageView>
                </graphic>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="temperature" mnemonicParsing="false" onMouseClicked="#toTemperature" prefHeight="72.0" prefWidth="204.0" style="-fx-background-color: transparent;" text="Temperature" textFill="WHITE">
+            </ToggleButton>
+            <ToggleButton id="menuButton" fx:id="temperature" mnemonicParsing="false" onMouseClicked="#toTemperature" prefHeight="77.0" prefWidth="204.0" text="Temperature">
                <graphic>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -47,10 +41,7 @@
                      </image>
                   </ImageView>
                </graphic>
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
+            </ToggleButton>
          </children>
          <effect>
             <DropShadow />

@@ -4,8 +4,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -14,20 +13,20 @@ public class FrameController {
     private boolean menuVisible = true;
 
     @FXML
-    private Button inputvalues;
+    private ToggleButton inputvalues;
 
     @FXML
     private VBox menu;
 
     @FXML
-    private Button monitoring;
+    private ToggleButton monitoring;
 
     @FXML
     private Pane sidepane;
 
     @FXML
-    private Button temperature;
-    private InputValuesController ivc;
+    private ToggleButton temperature;
+
     @FXML
     void shrinkMenu(MouseEvent event) {
         if(menuVisible) {
@@ -48,10 +47,12 @@ public class FrameController {
     void toInputValues(MouseEvent event) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
         Parent inputValues = fxmlLoader.load();
-        ivc = fxmlLoader.getController();
+        InputValuesController ivc = fxmlLoader.getController();
         ivc.setController(ivc);
         sidepane.getChildren().clear();
         sidepane.getChildren().add(inputValues);
+        inputValues.getStyleClass().clear();
+
     }
 
     @FXML
