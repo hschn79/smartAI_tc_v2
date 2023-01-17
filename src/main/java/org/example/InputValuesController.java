@@ -6,21 +6,31 @@ import calc.*;
 
 import ij.io.Opener;
 import ij.process.ImageProcessor;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ij.*;
+
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class InputValuesController{
     private static Scene scene;
@@ -44,6 +54,10 @@ public class InputValuesController{
     @FXML
     private TableColumn<Row, String> type;
 
+    private InputValuesController ivc;
+    private NewPhotoController npc;
+    private ObservableList<Row> listRows = FXCollections.observableArrayList();
+    private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
     public static void discardNewPhotoDialog() {
         stage.close();
     }
@@ -52,20 +66,63 @@ public class InputValuesController{
     void openDialogPane(MouseEvent event) throws IOException {
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        scene = new Scene(loadFXML("newPhoto"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource( "newPhoto.fxml"));
+        scene = new Scene(fxmlLoader.load());
+        npc = fxmlLoader.getController();
+        npc.setInputValuesController(this.ivc);
         stage.setTitle("Upload Picture");
-        stage.setScene(scene);
+        stage.setScene(this.scene);
         stage.show();
+    }
+    @FXML
+    void deletePictures(MouseEvent event) {
+        for(Row row : selectedRows) {
+            listRows.remove(row);
+        }
+        table.getItems().clear();
+        table.getItems().addAll(listRows);
     }
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
-    public static void initializeTable(String filename, String filepath, String time, String type) {
-        Measurement measure = (new ImageJClass()).analyze(filepath, LocalTime.now());
-        GrowthContainer container = GrowthContainer.instance();
-        container.addMeasure(measure);
+    public void initializeTable(String filename, File file, String time, String type) {
+        System.out.println("Inside initialize Table");
+        CheckBox cb = new CheckBox();
+        ImageView iv = new ImageView();
+        Image image = new Image(file.toURI().toString());
+        iv.setImage(image);
+        Row row = new Row(filename, time, type, iv, cb);
+        cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
+            selectedRow(row);
+        });
+        listRows.add(row);
+        table.getItems().clear();
+        table.getItems().addAll(listRows);
+        // Wirft Fehler, sobald mehrere Bilder geadded, daher auskommentiert
+        //Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
+        //GrowthContainer container = GrowthContainer.instance();
+        //container.addMeasure(measure);
         stage.close();
+    }
+    public void setController(InputValuesController ivc) {
+        this.ivc = ivc;
+    }
+    public void initialize(){
+        action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
+        filename.setCellValueFactory(new PropertyValueFactory<Row, String>("filename"));
+        picture.setCellValueFactory(new PropertyValueFactory<Row, String>("picture"));
+        time.setCellValueFactory(new PropertyValueFactory<Row, String>("time"));
+        type.setCellValueFactory(new PropertyValueFactory<Row, String>("type"));
+        table.getItems().addAll(listRows);
+    }
+    private void selectedRow(Row row) {
+        if(selectedRows.contains(row)) {
+            selectedRows.remove(row);
+        }else {
+            selectedRows.add(row);
+        }
+        System.out.println(selectedRows);
     }
 }

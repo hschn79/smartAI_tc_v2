@@ -1,13 +1,19 @@
 package org.example;
 
+
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.image.ImageView;
+
+
 public class Row {
     private String filename;
     private String time;
     private String type;
-    private String picture;
-    private String action;
+    private ImageView picture;
+    private CheckBox action;
 
-    public Row(String filename, String time, String type, String picture, String action) {
+    public Row(String filename, String time, String type, ImageView picture, CheckBox action) {
         this.filename = filename;
         this.time = time;
         this.type = type;
@@ -39,19 +45,19 @@ public class Row {
         this.type = type;
     }
 
-    public String getPicture() {
+    public ImageView getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(ImageView picture) {
         this.picture = picture;
     }
 
-    public String getAction() {
+    public CheckBox getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(CheckBox action) {
         this.action = action;
     }
 }

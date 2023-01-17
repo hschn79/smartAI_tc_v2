@@ -35,6 +35,9 @@ public class NewPhotoController {
     @FXML
     private Label fileNamePanel;
 
+    private InputValuesController ivc;
+
+
     @FXML
     void selectFile(ActionEvent event) {
         Stage stage = new Stage();
@@ -55,7 +58,7 @@ public class NewPhotoController {
             alert.setContentText("File or Time Input Missing!");
             alert.show();
         } else {
-            InputValuesController.initializeTable(fileNamePanel.getText(), file.getPath(), timeInput.getText(), comboBox.getValue().toString());
+            this.ivc.initializeTable(fileNamePanel.getText(), file, timeInput.getText(), comboBox.getValue().toString());
         }
 
     }
@@ -72,5 +75,9 @@ public class NewPhotoController {
     @FXML
     void discard(MouseEvent event) {
         InputValuesController.discardNewPhotoDialog();
+    }
+
+    public void setInputValuesController(InputValuesController ivc) {
+        this.ivc = ivc;
     }
 }

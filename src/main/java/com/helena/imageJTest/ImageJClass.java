@@ -29,28 +29,23 @@ public class ImageJClass {
 		Opener opener = new Opener();
 		ImagePlus image = opener.openImage(filepath);
 		ImageProcessor imageP = image.getProcessor();
-		image.show();
 		// Substract Background
 		BackgroundSubtracter backgroundSubtracter = new BackgroundSubtracter();
 		backgroundSubtracter.rollingBallBackground(imageP, 90, false, true, false,false, false);
 		ImagePlus testdisplay = new ImagePlus("Result Substracted Background", imageP);
-		testdisplay.show();
 		// Apply Median Filter
 		RankFilters rankFilters = new RankFilters();
 		rankFilters.rank(imageP, 5, MEDIAN);
 		testdisplay = new ImagePlus("Result Median Filter", imageP);
-		testdisplay.show();
 		// Apply Threshold
 		imageP.setAutoThreshold(AutoThresholder.Method.valueOf("IsoData"), true, BLACK_AND_WHITE_LUT);
 		testdisplay = new ImagePlus(" Result Threshold", imageP);
-		testdisplay.show();
 		// Analyze
 		ImagePlus picAnalyze = new ImagePlus("Picture Analyze", imageP);
 		ResultsTable resultsTable = new ResultsTable();
 		Analyzer analyzer = new Analyzer(picAnalyze, Measurements.AREA_FRACTION, resultsTable);
 		analyzer.measure();
-		resultsTable.show("Result Analysis");
-		
+
 		
 		Measurement measure= new Measurement(resultsTable.getColumn(resultsTable.getLastColumn())[0], time);
 		return measure;
