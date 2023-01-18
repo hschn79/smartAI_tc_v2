@@ -40,6 +40,7 @@ public class GrowthContainer implements Iterable<Measurement> {
 	}
 	
 	
+	
 	public Iterator<Measurement> iterator() {
 		return this.mlist.iterator();
 	}
@@ -71,6 +72,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	mlist.add(measure);
     	updatePhaseAndRate(threshhold);
     	changes.firePropertyChange("mlist",null, measure);
+    	
     }
     
     //removes a measurement
@@ -85,12 +87,27 @@ public class GrowthContainer implements Iterable<Measurement> {
     	return removeMeasure(new Measurement(conf, time));
     }
     
+    
+    public Measurement getMeasure(int index){
+    	return mlist.get(index);
+    }
+    
+    public Measurement getMeasure(LocalTime time, double conf) throws IllegalArgumentException{
+    	int index = mlist.indexOf(new Measurement(time, conf));
+    	if(index == -1) {
+    		throw new IllegalArgumentException("specified Measure doesnt exist");
+    	}
+    	return mlist.get(index);
+    }
+    
+    
     /**
      * estimates the time it takes to reach 90% confluency based on what you saw in my pdf under a)
      * @return final time as LocalTime
      * @throws IllegalStateException
      * @throws NumberFormatException
      **/
+    //die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
   	public LocalTime calcFinalTime() throws IllegalStateException, NumberFormatException{
   		double temp=0;
   		if(phase == GrowthPhase.NOTLOG) {
@@ -103,6 +120,9 @@ public class GrowthContainer implements Iterable<Measurement> {
   		
   		return startTime.plusSeconds((long) temp);
   	}
+  	
+  	
+  	
 
   	
     
@@ -113,6 +133,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     public void removePropertyChangeListener(PropertyChangeListener l) {
     	changes.removePropertyChangeListener(l);
     }
+    
     
     
     

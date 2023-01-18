@@ -17,6 +17,12 @@ public class Measurement {
         
     }
 	
+	public Measurement(LocalTime time, double conf) {
+        this.time=time;
+        this.conf=conf;
+        
+    }
+	
 	public static double calcGrowthRate(Measurement m1, Measurement m2) {
     	double C1= m1.getConf();
     	double C2= m2.getConf();
