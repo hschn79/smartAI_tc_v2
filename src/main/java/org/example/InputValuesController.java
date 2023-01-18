@@ -54,8 +54,6 @@ public class InputValuesController{
     @FXML
     private TableColumn<Row, String> type;
 
-    private InputValuesController ivc;
-    private NewPhotoController npc;
     private ObservableList<Row> listRows = FXCollections.observableArrayList();
     private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
     public static void discardNewPhotoDialog() {
@@ -68,8 +66,8 @@ public class InputValuesController{
         stage.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource( "newPhoto.fxml"));
         scene = new Scene(fxmlLoader.load());
-        npc = fxmlLoader.getController();
-        npc.setInputValuesController(this.ivc);
+        NewPhotoController npc = fxmlLoader.getController();
+        npc.setInputValuesController(this);
         stage.setTitle("Upload Picture");
         stage.setScene(this.scene);
         stage.show();
@@ -107,9 +105,6 @@ public class InputValuesController{
         //container.addMeasure(measure);
         stage.close();
     }
-    public void setController(InputValuesController ivc) {
-        this.ivc = ivc;
-    }
     public void initialize(){
         action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
         filename.setCellValueFactory(new PropertyValueFactory<Row, String>("filename"));
@@ -117,6 +112,7 @@ public class InputValuesController{
         time.setCellValueFactory(new PropertyValueFactory<Row, String>("time"));
         type.setCellValueFactory(new PropertyValueFactory<Row, String>("type"));
         table.getItems().addAll(listRows);
+        //npc.setInputValuesController(this);
     }
     private void selectedRow(Row row) {
         if(selectedRows.contains(row)) {

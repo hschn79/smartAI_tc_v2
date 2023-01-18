@@ -27,6 +27,9 @@ public class FrameController {
     @FXML
     private ToggleButton temperature;
 
+    private Parent inputValues;
+    private Parent monitoringParent;
+
     @FXML
     void shrinkMenu(MouseEvent event) {
         if(menuVisible) {
@@ -45,10 +48,6 @@ public class FrameController {
     }
     @FXML
     void toInputValues(MouseEvent event) throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
-        Parent inputValues = fxmlLoader.load();
-        InputValuesController ivc = fxmlLoader.getController();
-        ivc.setController(ivc);
         sidepane.getChildren().clear();
         sidepane.getChildren().add(inputValues);
         inputValues.getStyleClass().clear();
@@ -57,13 +56,18 @@ public class FrameController {
 
     @FXML
     void toMonitoring(MouseEvent event) throws IOException{
-        Parent monitoring = loadFXML("sidepane");
         sidepane.getChildren().clear();
-        sidepane.getChildren().add(monitoring);
+        sidepane.getChildren().add(monitoringParent);
     }
 
     @FXML
     void toTemperature(MouseEvent event) {
+
+    }
+    public void initialize() throws IOException {
+        inputValues = loadFXML("inputValues");
+        sidepane.getChildren().add(inputValues);
+        monitoringParent = loadFXML("sidepane");
 
     }
     private static Parent loadFXML(String fxml) throws IOException {

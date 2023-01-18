@@ -41,9 +41,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("frame"));
-        Pane pane = (Pane) scene.lookup("#sidepane");
-        Parent sidePane = loadFXML("inputValues");
-        pane.getChildren().add(sidePane);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

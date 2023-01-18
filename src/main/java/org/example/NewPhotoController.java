@@ -35,6 +35,7 @@ public class NewPhotoController {
     @FXML
     private Label fileNamePanel;
 
+    @FXML
     private InputValuesController ivc;
 
 
@@ -58,7 +59,7 @@ public class NewPhotoController {
             alert.setContentText("File or Time Input Missing!");
             alert.show();
         } else {
-            this.ivc.initializeTable(fileNamePanel.getText(), file, timeInput.getText(), comboBox.getValue().toString());
+            ivc.initializeTable(fileNamePanel.getText(), file, timeInput.getText(), comboBox.getValue().toString());
         }
 
     }
@@ -77,7 +78,7 @@ public class NewPhotoController {
         InputValuesController.discardNewPhotoDialog();
     }
 
-    public void setInputValuesController(InputValuesController ivc) {
-        this.ivc = ivc;
+   public void setInputValuesController(InputValuesController controller) {
+        ivc = controller;
     }
 }
