@@ -31,7 +31,7 @@ public class Prediction {
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalTime finTime) throws IllegalArgumentException, IllegalStateException{
 		int size=con.getMListSize();
 		double rate=con.getRate();
-		Measurement m1= con.getMeasure(size);
+		Measurement m1= con.getMeasure(size-1);
 		
 		if(size<2 || rate==0) {
 			throw new IllegalArgumentException("the specified container has not enough elements \n");
@@ -59,7 +59,7 @@ public class Prediction {
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
 		
-		return createPred(n,con,con.getMeasure(con.getMListSize()).getTime().plusHours(24));
+		return createPred(n,con,con.getMeasure(con.getMListSize()-1).getTime().plusHours(24));
 	}
 	
 	public LocalTime getTime() {

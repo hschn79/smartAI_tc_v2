@@ -99,7 +99,6 @@ public class InputValuesController{
         listRows.add(row);
         table.getItems().clear();
         table.getItems().addAll(listRows);
-        // Wirft Fehler, sobald mehrere Bilder geadded, daher auskommentiert
         Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
         System.out.println(measure.getConf());
         System.out.println(measure.getTime()); 
