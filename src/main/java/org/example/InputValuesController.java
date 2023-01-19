@@ -28,6 +28,7 @@ import ij.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,8 +102,9 @@ public class InputValuesController{
         // Wirft Fehler, sobald mehrere Bilder geadded, daher auskommentiert
         Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
         System.out.println(measure.getConf());
-        //GrowthContainer container = GrowthContainer.instance();
-        //container.addMeasure(measure);
+        System.out.println(measure.getTime()); 
+        GrowthContainer container = GrowthContainer.instance();
+        container.addMeasure(measure,true);
         stage.close();
     }
     public void initialize(){

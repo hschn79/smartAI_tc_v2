@@ -72,8 +72,10 @@ public class GrowthContainer implements Iterable<Measurement> {
     	if(mlist.contains(measure) || measure.getTime().compareTo(startTime) < 0) {
     		throw new IllegalArgumentException("measure already exists or time is sooner than start time");
     	}
-    	mlist.add(measure);
-    	updatePhaseAndRate(threshold);
+    	this.mlist.add(measure);
+    	if(update) {
+    		updatePhaseAndRate(threshold);	
+    	}
     	changes.firePropertyChange("mlist",null, measure);
     }
     
@@ -91,7 +93,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     public boolean removeMeasure(Measurement measure) {
     	boolean res=mlist.remove(measure);
     	if(res) {
-    		updatePhaseAndRate(threshold);
+    		this.updatePhaseAndRate(threshold);
     	}
     	return res;
     }
@@ -160,9 +162,9 @@ public class GrowthContainer implements Iterable<Measurement> {
     * Compares the most recent measurements
     **/
     public void updatePhaseAndRate(double threshold) {
-    	int n=mlist.size();
-    	if(!(n<2)) {	// if there are enough data points
-    		rate = Measurement.calcGrowthRate(mlist.get(n),mlist.get(n-1)); //calculates growth rate of the most recent measurements			
+    	int n=this.mlist.size();
+    	if(n>=2) {	// if there are enough data points
+    		rate = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements			
     		if(rate > threshold) {
     			phase= GrowthPhase.LOG;
     		} else {

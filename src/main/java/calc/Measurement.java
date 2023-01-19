@@ -30,7 +30,6 @@ public class Measurement {
     	LocalTime t2= m2.getTime();
     	Duration duration = Duration.between(t1, t2);
     	return ((C2-C1)/(duration.getSeconds()));
-    	//maybe minutes is the better time unit
 		//here we have confluency / seconds
     }
 	
