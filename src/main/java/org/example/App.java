@@ -19,12 +19,8 @@ import calc.GrowthContainer;
  * both of which are updated after you add a new measurement. 
  * Additionally there is a constant threshhold parameter, which is used as a threshold between phases.
  * We definetely need to calculate& update that threshhold, right now its just a magic number
- * I didnt change anything about the UI itself (I suck at those things)
- * I didnt implement any form of prediction yet
- * I didnt check that the input is okay everytime
  * Very important: 	1. The GrowthContainer has all the measurements, so you can build graphs, tables,... based on that
  * 					2. You can use beans to update the list of all measurements,... the container already implmements PropertyChangeListener
- * 					3. In the InputValuesController there is an important error which I didnt yet solve
 
 **/
 

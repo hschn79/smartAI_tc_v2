@@ -1,5 +1,4 @@
 package calc;
-
 import java.util.ArrayList;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -76,7 +75,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	if(update) {
     		updatePhaseAndRate(threshold);	
     	}
-    	changes.firePropertyChange("mlist",null, measure);
+    	changes.firePropertyChange("mlist add",null, measure);
     }
     
     /**
@@ -94,6 +93,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	boolean res=mlist.remove(measure);
     	if(res) {
     		this.updatePhaseAndRate(threshold);
+    		changes.firePropertyChange("mlist rmv", measure, null);
     	}
     	return res;
     }
@@ -163,13 +163,19 @@ public class GrowthContainer implements Iterable<Measurement> {
     **/
     public void updatePhaseAndRate(double threshold) {
     	int n=this.mlist.size();
-    	if(n>=2) {	// if there are enough data points
-    		rate = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements			
+    	double rate=this.getRate();
+    	if(n>2) {	// if there are enough data points
+    		double temp = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements			
+    		changes.firePropertyChange("updated Rate", rate, temp);
+    		rate=temp;
     		if(rate > threshold) {
+    			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
     			phase= GrowthPhase.LOG;
+    			System.out.println("\n Checkpoint PropertyChange updated Phase to Log");
     		} else {
     			phase=GrowthPhase.NOTLOG;
     		}
+    		
     	}
     	
     }
