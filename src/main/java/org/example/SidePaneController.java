@@ -61,6 +61,8 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	chartMonitoring.getData().add(measurements);
     }
     
+    
+    
     /** gibt nur prediction wenn mindestens 3 elemente enthalten sind
      * @param e
      * @param con
