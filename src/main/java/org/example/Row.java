@@ -11,14 +11,12 @@ import java.time.LocalDateTime;
 public class Row {
     private String filename;
     private LocalDateTime time;
-    private String type;
     private ImageView picture;
     private CheckBox action;
 
-    public Row(String filename, LocalDateTime time, String type, ImageView picture, CheckBox action) {
+    public Row(String filename, LocalDateTime time, ImageView picture, CheckBox action) {
         this.filename = filename;
         this.time = time;
-        this.type = type;
         this.picture = picture;
         this.action = action;
     }
@@ -37,14 +35,6 @@ public class Row {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public ImageView getPicture() {

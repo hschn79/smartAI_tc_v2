@@ -64,7 +64,7 @@ public class NewPhotoController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
             try {
                 LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
-                ivc.initializeTable(fileNamePanel.getText(), file, dateTime, "test");
+                ivc.initializeTable(fileNamePanel.getText(), file, dateTime);
             } catch (DateTimeParseException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setContentText("Date must be in format dd-MM-yyyy HH:mm");

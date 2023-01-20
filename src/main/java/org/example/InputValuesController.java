@@ -51,9 +51,6 @@ public class InputValuesController{
     @FXML
     private TableColumn<Row, String> time;
 
-    @FXML
-    private TableColumn<Row, String> type;
-
     private ObservableList<Row> listRows = FXCollections.observableArrayList();
     private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
     private Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
@@ -95,15 +92,14 @@ public class InputValuesController{
      * @param filename
      * @param file
      * @param time
-     * @param type
      */
-    public void initializeTable(String filename, File file, LocalDateTime time, String type) {
+    public void initializeTable(String filename, File file, LocalDateTime time) {
         System.out.println("Inside initialize Table");
         CheckBox cb = new CheckBox();
         ImageView iv = new ImageView();
         Image image = new Image(file.toURI().toString(), 50, 50, false, false);
         iv.setImage(image);
-        Row row = new Row(filename, time, type, iv, cb);
+        Row row = new Row(filename, time, iv, cb);
         cb.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) -> {
             selectedRow(row);
         });
@@ -122,9 +118,7 @@ public class InputValuesController{
         filename.setCellValueFactory(new PropertyValueFactory<Row, String>("filename"));
         picture.setCellValueFactory(new PropertyValueFactory<Row, String>("picture"));
         time.setCellValueFactory(new PropertyValueFactory<Row, String>("time"));
-        type.setCellValueFactory(new PropertyValueFactory<Row, String>("type"));
         table.getItems().addAll(listRows);
-        //npc.setInputValuesController(this);
     }
     private void selectedRow(Row row) {
         if(selectedRows.contains(row)) {

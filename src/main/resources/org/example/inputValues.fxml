@@ -13,11 +13,10 @@
          <children>
             <TableView id="tableview" fx:id="table" layoutX="22.0" layoutY="75.0" prefHeight="297.0" prefWidth="578.0">
               <columns>
-                <TableColumn fx:id="filename" prefWidth="111.33331298828125" text="Filename" />
-                <TableColumn fx:id="time" prefWidth="75.33334350585938" text="Time" />
-                  <TableColumn fx:id="type" prefWidth="84.0" text="Type" />
-                  <TableColumn fx:id="picture" prefWidth="205.33331298828125" text="Picture" />
-                  <TableColumn fx:id="action" prefWidth="144.66668701171875" text="Action" />
+                <TableColumn fx:id="filename" prefWidth="134.66669273376465" text="Filename" />
+                <TableColumn fx:id="time" prefWidth="175.3333282470703" text="Time" />
+                  <TableColumn fx:id="picture" prefWidth="200.00009155273438" text="Picture" />
+                  <TableColumn fx:id="action" prefWidth="68.0" text="Action" />
               </columns>
             </TableView>
             <Text layoutX="20.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add at least three pictures of your cell culture:" />
