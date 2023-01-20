@@ -44,8 +44,7 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdatedPhase(e,con);
     	}
-    		
-    		
+    	
     		
     	}
     
