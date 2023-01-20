@@ -38,29 +38,23 @@ public class Measurement {
     	return ((C2-C1)/(duration.toHours()));
 		//here we have confluency / hours
     }
-	
-	
-	
 	//sets time as current time
 	public Measurement(double conf) { 
         this.time=LocalDateTime.now();
         this.conf=conf;
     }
-	
-	public Measurement(double conf, LocalDateTime time) { 
+	public Measurement(double conf, LocalDateTime time) {
         this.time=time;
         this.conf=conf;
     }
 	
-
     public LocalDateTime getTime() {
         return time;
     }
-
+    
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
-
     public double getConf() {
         return conf;
     }

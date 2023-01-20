@@ -33,13 +33,9 @@ public class SidePaneController implements Initializable, PropertyChangeListener
         
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
-        
-        
-        
     }
     
     // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
-    
     
     @Override
     public void propertyChange(PropertyChangeEvent e) {
@@ -58,7 +54,8 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	}
     
     public void MeasureOnAdded(GrowthContainer con, XYChart.Series measurements) {
-    	Measurement x = con.getMeasure(con.getMListSize()-1);
+		int size = con.getMListSize() -1;
+    	Measurement x = con.getMeasure(size);
     	measurements.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
     	chartMonitoring.getData().clear();
     	chartMonitoring.getData().add(measurements);
@@ -95,8 +92,7 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     		}
     	}
     }	
-    	
-		
+
 }
 
 

@@ -28,10 +28,9 @@ import ij.*;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InputValuesController{
     private static Scene scene;
@@ -57,6 +56,7 @@ public class InputValuesController{
 
     private ObservableList<Row> listRows = FXCollections.observableArrayList();
     private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
+    private Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
     public static void discardNewPhotoDialog() {
         stage.close();
     }
@@ -75,8 +75,12 @@ public class InputValuesController{
     }
     @FXML
     void deletePictures(MouseEvent event) {
+        GrowthContainer container = GrowthContainer.instance();
+        Measurement measurement;
         for(Row row : selectedRows) {
             listRows.remove(row);
+            measurement = rowMeasurementMap.get(row);
+            container.removeMeasure(measurement);
         }
         table.getItems().clear();
         table.getItems().addAll(listRows);
@@ -106,9 +110,9 @@ public class InputValuesController{
         listRows.add(row);
         table.getItems().clear();
         table.getItems().addAll(listRows);
-        Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalDateTime.now());
-        System.out.println(measure.getConf());
-        System.out.println(measure.getTime()); 
+        ImageJClass ij = new ImageJClass();
+        Measurement measure = ij.analyze(file.getPath(), LocalDateTime.now());
+        rowMeasurementMap.put(row, measure);
         GrowthContainer container = GrowthContainer.instance();
         container.addMeasure(measure,true);
         stage.close();

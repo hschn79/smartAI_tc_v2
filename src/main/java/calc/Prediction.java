@@ -2,7 +2,7 @@ package calc;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-import java.time.Duration;
+import java.time.Duration;import calc.GrowthContainer;
 
 // might be worth doing "extends Measurement"
 public class Prediction {
@@ -21,12 +21,12 @@ public class Prediction {
 	
 	
 	/**
-	 * 
-	 * @param n				Anzahl der erzeugten Punkte
-	 * @param container		von dort wird die letzte Messung und Rate ausgelesen
-	 * @return				eine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
-	 * 						Punkte sind zeitlich gleichmäßig verteilt
-	 * 						Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
+	 *
+	 * @paramAnzahl der erzeugten Punkte
+	 *  container von dort wird die letzte Messung und Rate ausgelesen
+	 * @returneine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
+	 * Punkte sind zeitlich gleichmäßig verteilt
+	 *Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalDateTime finTime) throws IllegalArgumentException, IllegalStateException{
 		int size=con.getMListSize();
@@ -41,18 +41,16 @@ public class Prediction {
 		}
 		LocalDateTime m1Time=m1.getTime();
 		
-		ArrayList<Prediction> list = new ArrayList<Prediction>();
+		ArrayList<Prediction> list = new ArrayList<>();
 		Duration BigInt = Duration.between(m1Time,finTime);
 		Duration SmallInt=BigInt.dividedBy(n);		// time intervall between points = SmallInt
 		System.out.println("Small Intervall: " + String.valueOf(SmallInt.toHours()) + "\n" + "Big Intervall " + String.valueOf(BigInt.toHours()) +"\n");
 		for(int i=1;i<n;i++) {
 			
 			LocalDateTime tempTime= m1.getTime().plus(SmallInt.multipliedBy(i));
-			Double tempConf = m1.getConf() * Math.exp(rate * Duration.between(m1Time, tempTime).toHours());
+			double tempConf = m1.getConf() * Math.exp(rate * Duration.between(m1Time, tempTime).toHours());
 			list.add(new Prediction(tempConf,tempTime));
 		}
-		
-		
 		return list;
 	}
 	
