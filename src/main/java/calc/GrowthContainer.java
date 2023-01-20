@@ -1,7 +1,7 @@
 package calc;
 import java.util.ArrayList;
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.beans.PropertyChangeListener;
@@ -9,15 +9,14 @@ import java.beans.PropertyChangeSupport;
 import java.math.*;
 
 
-// should be called when a) at the start of the programm , b) right after you added an image, ...
 public class GrowthContainer implements Iterable<Measurement> {
 	
 	private static GrowthContainer unique = null;
 	private GrowthPhase phase = GrowthPhase.NOTLOG;
 	private ArrayList<Measurement> mlist;
-	private static LocalTime startTime;
-	private static LocalTime desiredEndTime;
-	private static double rate=0;			// the first measure will have that r=0 assigned, maybe instead null?
+	private static LocalDateTime startTime;
+	private static LocalDateTime desiredEndTime;
+	private static double rate=0;			// the first measure will have that r=0 assigned, unit is usually % per hour
 	
 	//need to calculate these somehow
 	private static double threshold= 0.0000001; //when is log phase?
@@ -61,22 +60,44 @@ public class GrowthContainer implements Iterable<Measurement> {
 	/**adds a new measurement to the container and updates phase&rate if necessary
 	*  notifies all listeners after a measurement has been added
 	*  if update is true then the Phase and growth rate are also updated
+	*  If this is the first measurement then the time will be LocalTime.now().
+	*  Otherwise it is set by the time in the method below
 	**/ 
     public void addMeasure(Measurement measure, boolean update) throws IllegalArgumentException{
     	//define the point where you start measuring
     	//henceforth this will mark the point t=0
-    	if(mlist.size()==0) {
-    		startTime=measure.getTime();	
-    	}
-    	if(mlist.contains(measure) || measure.getTime().compareTo(startTime) < 0) {
+    	int n = mlist.size();
+    	if(n==0) {
+    		startTime=measure.getTime();
+        	mlist.add(measure);
+    	} else if(mlist.contains(measure)) {
     		throw new IllegalArgumentException("measure already exists or time is sooner than start time");
+    	} else {
+    		addMeasure(measure.getConf(),update);
     	}
-    	this.mlist.add(measure);
     	if(update) {
     		updatePhaseAndRate(threshold);	
     	}
     	changes.firePropertyChange("mlist add",null, measure);
     }
+    
+    /**USED FOR TESTING
+	 * the time of the added measurement is the time of the previous measurement + 3days
+     * @param conf
+     * @param update  use true if you also want to update rate and phase (recommended)
+     */
+    public void addMeasure(double conf, boolean update) {
+    	
+    	LocalDateTime temp= mlist.get(mlist.size()-1).getTime().plusDays(2);
+    	Measurement measure = new Measurement(conf,temp);
+    	mlist.add(measure);
+    	if(update) {
+    		updatePhaseAndRate(threshold);	
+    	}
+    	changes.firePropertyChange("mlist add",null, measure);
+    	
+    }
+    
     
     /**
      * same thing as above but with no update
@@ -100,7 +121,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     
     //removes the measurement specified by conf and time
     //returns true if the measure was found in the list
-    public boolean removeMeasure(double conf, LocalTime time) {
+    public boolean removeMeasure(double conf, LocalDateTime time) {
     	return removeMeasure(new Measurement(conf, time));
     }
     
@@ -109,7 +130,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	return mlist.get(index);
     }
     
-    public Measurement getMeasure(LocalTime time, double conf) throws IllegalArgumentException{
+    public Measurement getMeasure(LocalDateTime time, double conf) throws IllegalArgumentException{
     	int index = mlist.indexOf(new Measurement(time, conf));
     	if(index == -1) {
     		throw new IllegalArgumentException("specified Measure doesnt exist");
@@ -120,14 +141,14 @@ public class GrowthContainer implements Iterable<Measurement> {
     
     /**
      * estimates the time it takes to reach 90% confluency based on the last measurement and current growth rate
-     * @return final time as LocalTime
+     * @return final time as LocalDateTime
      * @throws IllegalStateException
      * @throws NumberFormatException
      **/
-    //die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
-  	public LocalTime calcFinalTime() throws IllegalStateException, NumberFormatException{
+    //für später: die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
+  	public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
   		double temp=0;
-  		Measurement measure=mlist.get(mlist.size());
+  		Measurement measure=mlist.get(mlist.size()-1);
   		if(phase == GrowthPhase.NOTLOG) {
   			throw new IllegalStateException("cells have not reached log phase");
   		}
@@ -137,7 +158,7 @@ public class GrowthContainer implements Iterable<Measurement> {
   			throw new NumberFormatException("error calculating the final time");
   		}
   		
-  		return measure.getTime().plusSeconds((long) temp);
+  		return measure.getTime().plusHours((long) temp);
   	}
   	
   	
@@ -163,19 +184,17 @@ public class GrowthContainer implements Iterable<Measurement> {
     **/
     public void updatePhaseAndRate(double threshold) {
     	int n=this.mlist.size();
-    	double rate=this.getRate();
+    	double oldrate=this.getRate();
     	if(n>2) {	// if there are enough data points
-    		double temp = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements			
-    		changes.firePropertyChange("updated Rate", rate, temp);
-    		rate=temp;
+    		double temp = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements
+    		this.rate=temp;			
+    		changes.firePropertyChange("updated Rate", oldrate, temp);
     		if(rate > threshold) {
-    			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
     			phase= GrowthPhase.LOG;
-    			System.out.println("\n Checkpoint PropertyChange updated Phase to Log");
+    			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
     		} else {
     			phase=GrowthPhase.NOTLOG;
     		}
-    		
     	}
     	
     }

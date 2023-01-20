@@ -9,7 +9,8 @@ import javafx.scene.chart.XYChart;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -27,14 +28,15 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	measurements.setName("Measurements");
         XYChart.Series series = new XYChart.Series();
         series.setName("Data-Points");
-        series.getData().add(new XYChart.Data(LocalTime.now().toString(), 23));
+        series.getData().add(new XYChart.Data(LocalDateTime.now().toString(), 23));
         chartMonitoring.getData().add(series);
         
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
     }
-    // LocalTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
-
+    
+    // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
+    
     @Override
     public void propertyChange(PropertyChangeEvent e) {
     	GrowthContainer con = GrowthContainer.instance();
@@ -44,9 +46,12 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     			//Measurement removed = e.getOldValue();
     			//chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
-    		//PredictionOnUpdate(e,con);
+    		//PredictionOnUpdatedPhase(e,con);
     	}
-	}
+    		
+    		
+    		
+    	}
     
     public void MeasureOnAdded(GrowthContainer con, XYChart.Series measurements) {
 		int size = con.getMListSize() -1;
@@ -56,18 +61,23 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	chartMonitoring.getData().add(measurements);
     }
     
+    
+    
     /** gibt nur prediction wenn mindestens 3 elemente enthalten sind
-     * 
      * @param e
      * @param con
+     * macht momentan 100 predictions. 
+     * Problem: createPredictions in Prediction hat Problem
      */
-    public void PredictionOnUpdate(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{
+    public void PredictionOnUpdatedPhase(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{
     	try {
     		Prediction pred = new Prediction(0);			
-    		ArrayList<Prediction> list = pred.createPred(10, con); // I wanted to make createPred static but then it doesnt work for some reason
+    		ArrayList<Prediction> list = pred.createPred(5, con); // I wanted to make createPred static but then it doesnt work for some reason
+    		
     		for(Prediction p : list) {
     			System.out.println("\n predicted confluency at " + p.getTime().toString() + " is: " + String.valueOf(p.getConf()));
     		}
+    		/*
     		XYChart.Series predictions = new XYChart.Series();
         	predictions.setName("Prediction");
         	for(Prediction x : list) {
@@ -75,9 +85,10 @@ public class SidePaneController implements Initializable, PropertyChangeListener
             	chartMonitoring.getData().add(predictions);
             	System.out.println("\n Checkpoint add predictions to Chart\n");		
         		}
+        	*/
     	} catch (IllegalArgumentException i) {
-    		if(i.getMessage().equals("the specified container has not enough elements")){
-    			
+    		if(i.getMessage().contains("the specified container has not enough elements")){
+    			System.out.println("\n" + i.getMessage() + "\n");
     		} else {
     			throw new IllegalArgumentException("Sth went wrong here: " + i.getMessage());
     		}
