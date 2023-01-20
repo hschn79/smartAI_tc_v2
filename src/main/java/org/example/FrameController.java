@@ -71,14 +71,27 @@ public class FrameController {
         inputValues = fxmlLoader.load();
         InputValuesController ivc = fxmlLoader.getController();
         sidepane.getChildren().add(inputValues);
-        monitoringParent = loadFXML("monitoring");
+        fxmlLoader = new FXMLLoader(App.class.getResource("monitoring.fxml"));
+        monitoringParent = fxmlLoader.load();
+        MonitoringController mc = fxmlLoader.getController();
         fxmlLoader = new FXMLLoader(App.class.getResource("temperature.fxml"));
         temperatureParent = fxmlLoader.load();
         TemperatureController tc = fxmlLoader.getController();
-        ivc.setTemperatureController(tc);
+        ivc.setController(tc, mc);
+        mc.setFrameController(this);
     }
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    public void reset() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
+        inputValues = fxmlLoader.load();
+        InputValuesController ivc = fxmlLoader.getController();
+        sidepane.getChildren().add(inputValues);
+        fxmlLoader = new FXMLLoader(App.class.getResource("monitoring.fxml"));
+        monitoringParent = fxmlLoader.load();
+        MonitoringController mc = fxmlLoader.getController();
+        fxmlLoader = new FXMLLoader(App.class.getResource("temperature.fxml"));
+        temperatureParent = fxmlLoader.load();
+        TemperatureController tc = fxmlLoader.getController();
+        ivc.setController(tc, mc);
+        mc.setFrameController(this);
     }
 }

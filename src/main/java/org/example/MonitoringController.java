@@ -1,6 +1,7 @@
 package org.example;
 
 import calc.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -8,6 +9,7 @@ import javafx.scene.chart.XYChart;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import calc.GrowthContainer;
 public class MonitoringController implements Initializable, PropertyChangeListener {
 
 	private XYChart.Series measurements;
+	private FrameController frameController;
 	
     @FXML
     private LineChart<?, ?> chartMonitoring;
@@ -32,6 +35,13 @@ public class MonitoringController implements Initializable, PropertyChangeListen
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
     }
+	@FXML
+	void reset(ActionEvent event)throws IOException {
+		frameController.reset();
+	}
+	public void setFrameController(FrameController fc) {
+		frameController = fc;
+	}
     
     // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
     

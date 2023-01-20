@@ -12,9 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,6 +31,11 @@ public class InputValuesController{
     private static Stage stage;
 
     @FXML
+    private Button addButton;
+
+    @FXML
+    private Button deleteButton;
+    @FXML
     private TableColumn<Row, String> action;
 
     @FXML
@@ -50,11 +53,26 @@ public class InputValuesController{
     private ObservableList<Row> listRows = FXCollections.observableArrayList();
     private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
     private Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
+    // Use this controller to call methods in temperatureController
     private TemperatureController temperatureController;
+    // Use this controller to call methods in monitoringController
+    private MonitoringController monitoringController;
     public static void discardNewPhotoDialog() {
         stage.close();
     }
 
+    @FXML
+    void startMeasurement(MouseEvent event) {
+        if(listRows.size() < 3) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Add at least 3 pictures");
+            alert.show();
+        } else {
+            addButton.setDisable(true);
+            deleteButton.setDisable(true);
+        }
+
+    }
     @FXML
     void openDialogPane(MouseEvent event) throws IOException {
         stage = new Stage();
@@ -127,7 +145,8 @@ public class InputValuesController{
         }
         System.out.println(selectedRows);
     }
-    public void setTemperatureController(TemperatureController tc) {
+    public void setController(TemperatureController tc, MonitoringController mc) {
         temperatureController = tc;
+        monitoringController = mc;
     }
 }
