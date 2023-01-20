@@ -10,7 +10,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -33,14 +32,9 @@ public class SidePaneController implements Initializable, PropertyChangeListener
         
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
-        
-        
-        
     }
-    
     // LocalTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
-    
-    
+
     @Override
     public void propertyChange(PropertyChangeEvent e) {
     	GrowthContainer con = GrowthContainer.instance();
@@ -52,13 +46,11 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdate(e,con);
     	}
-    		
-    		
-    		
-    	}
+	}
     
     public void MeasureOnAdded(GrowthContainer con, XYChart.Series measurements) {
-    	Measurement x = con.getMeasure(con.getMListSize()-1);
+		int size = con.getMListSize() -1;
+    	Measurement x = con.getMeasure(size);
     	measurements.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
     	chartMonitoring.getData().clear();
     	chartMonitoring.getData().add(measurements);
@@ -91,8 +83,7 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     		}
     	}
     }	
-    	
-		
+
 }
 
 

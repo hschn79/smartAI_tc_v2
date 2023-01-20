@@ -2,7 +2,7 @@ package calc;
 
 import java.util.ArrayList;
 import java.time.LocalTime;
-import java.time.Duration;
+import java.time.Duration;import calc.GrowthContainer;
 
 // might be worth doing "extends Measurement"
 public class Prediction {
@@ -21,12 +21,12 @@ public class Prediction {
 	
 	
 	/**
-	 * 
-	 * @param n				Anzahl der erzeugten Punkte
-	 * @param container		von dort wird die letzte Messung und Rate ausgelesen
-	 * @return				eine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
-	 * 						Punkte sind zeitlich gleichmäßig verteilt
-	 * 						Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
+	 *
+	 * @paramAnzahl der erzeugten Punkte
+	 *  container von dort wird die letzte Messung und Rate ausgelesen
+	 * @returneine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
+	 * Punkte sind zeitlich gleichmäßig verteilt
+	 *Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalTime finTime) throws IllegalArgumentException, IllegalStateException{
 		int size=con.getMListSize();
@@ -40,17 +40,14 @@ public class Prediction {
 		}
 		LocalTime m1Time=m1.getTime();
 		
-		ArrayList<Prediction> list = new ArrayList<Prediction>();
+		ArrayList<Prediction> list = new ArrayList<>();
 		Duration BigInt = Duration.between(m1Time,finTime);
 		Duration SmallInt=BigInt.dividedBy(n);		// time intervall between points = SmallInt
 		for(int i=0;i<n;i++) {
-			
 			LocalTime tempTime= m1.getTime().plus(SmallInt.multipliedBy(i));
-			Double tempConf = m1.getConf() * Math.exp(rate * Duration.between(m1Time, tempTime).getSeconds());
+			double tempConf = m1.getConf() * Math.exp(rate * Duration.between(m1Time, tempTime).getSeconds());
 			list.add(new Prediction(tempConf,tempTime));
 		}
-		
-		
 		return list;
 	}
 	
