@@ -27,7 +27,7 @@ import ij.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +86,13 @@ public class InputValuesController{
         return fxmlLoader.load();
     }
 
+    /**
+     * Right now when you input a file, we adjust the time for testing
+     * @param filename
+     * @param file
+     * @param time
+     * @param type
+     */
     public void initializeTable(String filename, File file, String time, String type) {
         System.out.println("Inside initialize Table");
         CheckBox cb = new CheckBox();
@@ -99,7 +106,7 @@ public class InputValuesController{
         listRows.add(row);
         table.getItems().clear();
         table.getItems().addAll(listRows);
-        Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalTime.now());
+        Measurement measure = (new ImageJClass()).analyze(file.getPath(), LocalDateTime.now());
         System.out.println(measure.getConf());
         System.out.println(measure.getTime()); 
         GrowthContainer container = GrowthContainer.instance();

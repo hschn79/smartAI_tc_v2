@@ -1,6 +1,6 @@
 package com.helena.imageJTest;
 import calc.Measurement;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 import ij.*;
 import ij.io.Opener;
@@ -24,7 +24,7 @@ public class ImageJClass {
 	
 	// returns the respective Measurement object associated with the input picture
 	// You still need to close all the windows 
-	public Measurement analyze(String filepath,LocalTime time) {
+	public Measurement analyze(String filepath,LocalDateTime time) {
 		// Open picture as 8-bit
 		Opener opener = new Opener();
 		ImagePlus image = opener.openImage(filepath);
