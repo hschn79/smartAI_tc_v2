@@ -13,6 +13,14 @@ import java.io.IOException;
 
 import calc.GrowthContainer;
 
+
+/*
+ * Zum Testen:
+ * cells_10	bei 	20-01-2023 17:47
+ * cells_30	bei 	23-01-2023 17:47
+ * cells_50	bei		23-01-2023 23:47
+ * cells_90	bei		24-01-2023 03:40
+*/
 /** What I have(nt) done so far:
  * upon saving an image, it will be analyzed by imageJ and the time+confluency = measurement will be added to the GrowthContainer
  * the container itself also has a GrowthPhase (see enum) and the current growth rate, 

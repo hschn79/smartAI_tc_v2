@@ -26,7 +26,7 @@ public class Prediction {
 	 *  container von dort wird die letzte Messung und Rate ausgelesen
 	 * @returneine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
 	 * Punkte sind zeitlich gleichmäßig verteilt
-	 *Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
+	 * Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalDateTime finTime) throws IllegalArgumentException, IllegalStateException{
 		int size=con.getMListSize();
@@ -55,7 +55,7 @@ public class Prediction {
 	}
 	
 	/**
-	 * Same thing as the previous one just with finTime=final Time (also wenn confluency~90%)
+	 * Same thing as the previous one just with finTime=critical Time (also wenn confluency~90%)
 	 * Problem: final Time ist vor der Zeit der letzten Messung...
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
@@ -79,7 +79,7 @@ public class Prediction {
         return conf;
     }
 
-    public void setType(double conf) {
+    public void setConf(double conf) {
         this.conf = conf;
     }
 }

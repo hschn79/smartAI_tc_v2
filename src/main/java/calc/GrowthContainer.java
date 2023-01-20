@@ -1,5 +1,6 @@
 package calc;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -60,20 +61,17 @@ public class GrowthContainer implements Iterable<Measurement> {
 	/**adds a new measurement to the container and updates phase&rate if necessary
 	*  notifies all listeners after a measurement has been added
 	*  if update is true then the Phase and growth rate are also updated
-	*  If this is the first measurement then the time will be LocalTime.now().
-	*  Otherwise it is set by the time in the method below
+	*  If this is the first measurement then the its time will be stored in startTime
 	**/ 
     public void addMeasure(Measurement measure, boolean update) throws IllegalArgumentException{
-    	//define the point where you start measuring
-    	//henceforth this will mark the point t=0
     	int n = mlist.size();
     	if(n==0) {
     		startTime=measure.getTime();
         	mlist.add(measure);
-    	} else if(mlist.contains(measure)) {
-    		throw new IllegalArgumentException("measure already exists or time is sooner than start time");
+    	} else if(mlist.contains(measure) || measure.getTime().isBefore(startTime)) {
+    		throw new IllegalArgumentException("measure already exists or its time is sooner than start time");
     	} else {
-    		addMeasure(measure.getConf(),update);
+    		mlist.add(measure);
     	}
     	if(update) {
     		updatePhaseAndRate(threshold);	
@@ -82,15 +80,15 @@ public class GrowthContainer implements Iterable<Measurement> {
     }
     
     /**USED FOR TESTING
-	 * the time of the added measurement is the time of the previous measurement + 3days
+	 * the time of the added measurement is LocalDateTime.now()
      * @param conf
      * @param update  use true if you also want to update rate and phase (recommended)
      */
     public void addMeasure(double conf, boolean update) {
     	
-    	LocalDateTime temp= mlist.get(mlist.size()-1).getTime().plusDays(2);
-    	Measurement measure = new Measurement(conf,temp);
+    	Measurement measure = new Measurement(conf,LocalDateTime.now());
     	mlist.add(measure);
+    	Collections.sort(mlist);
     	if(update) {
     		updatePhaseAndRate(threshold);	
     	}
@@ -132,7 +130,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     
     public Measurement getMeasure(LocalDateTime time, double conf) throws IllegalArgumentException{
     	int index = mlist.indexOf(new Measurement(time, conf));
-    	if(index == -1) {
+    	if(index <= -1) {
     		throw new IllegalArgumentException("specified Measure doesnt exist");
     	}
     	return mlist.get(index);

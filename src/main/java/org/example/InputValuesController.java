@@ -82,6 +82,7 @@ public class InputValuesController{
         table.getItems().clear();
         table.getItems().addAll(listRows);
     }
+    
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
@@ -107,7 +108,7 @@ public class InputValuesController{
         table.getItems().clear();
         table.getItems().addAll(listRows);
         ImageJClass ij = new ImageJClass();
-        Measurement measure = ij.analyze(file.getPath(), LocalDateTime.now());
+        Measurement measure = ij.analyze(file.getPath(), time);
         rowMeasurementMap.put(row, measure);
         GrowthContainer container = GrowthContainer.instance();
         container.addMeasure(measure,true);

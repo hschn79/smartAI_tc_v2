@@ -26,10 +26,6 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     public void initialize(URL url, ResourceBundle rb) {
     	measurements = new XYChart.Series();
     	measurements.setName("Measurements");
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Data-Points");
-        series.getData().add(new XYChart.Data(LocalDateTime.now().toString(), 23));
-        chartMonitoring.getData().add(series);
         
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
@@ -43,8 +39,8 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con, measurements);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
-    			//Measurement removed = e.getOldValue();
-    			//chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
+    			Measurement removed = (Measurement) e.getOldValue();
+    			chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdatedPhase(e,con);
     	}
