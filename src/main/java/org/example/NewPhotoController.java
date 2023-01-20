@@ -17,6 +17,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class NewPhotoController {
 
@@ -24,8 +27,6 @@ public class NewPhotoController {
 
     private ComboBox comboBox;
 
-    @FXML
-    private HBox hbox_phototype;
     @FXML
     private ImageView fotodepictor;
 
@@ -54,23 +55,23 @@ public class NewPhotoController {
     }
     @FXML
     void save(MouseEvent event) {
-        if(timeInput.getText().isEmpty()|| fileNamePanel.getText().isEmpty() || comboBox.getSelectionModel().isEmpty()) {
+        String time = timeInput.getText();
+        if(time == null || fileNamePanel.getText().isEmpty() || file == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("File or Time Input Missing!");
             alert.show();
         } else {
-            ivc.initializeTable(fileNamePanel.getText(), file, timeInput.getText(), comboBox.getValue().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            try {
+                LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
+                ivc.initializeTable(fileNamePanel.getText(), file, dateTime, "test");
+            } catch (DateTimeParseException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Date must be in format dd-MM-yyyy HH:mm");
+                alert.show();
+                return;
+            }
         }
-
-    }
-    public void initialize(){
-        ObservableList<String> options = FXCollections.observableArrayList(
-                "Reference Picture",
-                "Measurement Picture"
-        );
-        comboBox = new ComboBox(options);
-        hbox_phototype.getChildren().add(comboBox);
-        hbox_phototype.setMargin(comboBox, new Insets(0, 0, 0, 5));
 
     }
     @FXML

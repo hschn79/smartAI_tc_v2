@@ -97,7 +97,7 @@ public class InputValuesController{
      * @param time
      * @param type
      */
-    public void initializeTable(String filename, File file, String time, String type) {
+    public void initializeTable(String filename, File file, LocalDateTime time, String type) {
         System.out.println("Inside initialize Table");
         CheckBox cb = new CheckBox();
         ImageView iv = new ImageView();

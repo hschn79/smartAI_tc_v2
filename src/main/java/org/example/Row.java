@@ -5,15 +5,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 
+import java.time.LocalDateTime;
+
 
 public class Row {
     private String filename;
-    private String time;
+    private LocalDateTime time;
     private String type;
     private ImageView picture;
     private CheckBox action;
 
-    public Row(String filename, String time, String type, ImageView picture, CheckBox action) {
+    public Row(String filename, LocalDateTime time, String type, ImageView picture, CheckBox action) {
         this.filename = filename;
         this.time = time;
         this.type = type;
@@ -29,11 +31,11 @@ public class Row {
         this.filename = filename;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 
