@@ -1,11 +1,10 @@
 package org.example;
 
+import ImageAnalysis.ImageJClass;
 import calc.GrowthContainer;
-import com.helena.imageJTest.*;
+import ImageAnalysis.*;
 import calc.*;
 
-import ij.io.Opener;
-import ij.process.ImageProcessor;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -23,13 +21,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ij.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class InputValuesController{
@@ -54,6 +50,7 @@ public class InputValuesController{
     private ObservableList<Row> listRows = FXCollections.observableArrayList();
     private ObservableList<Row> selectedRows = FXCollections.observableArrayList();
     private Map<Row, Measurement> rowMeasurementMap = new HashMap<>();
+    private TemperatureController temperatureController;
     public static void discardNewPhotoDialog() {
         stage.close();
     }
@@ -112,6 +109,8 @@ public class InputValuesController{
         GrowthContainer container = GrowthContainer.instance();
         container.addMeasure(measure,true);
         stage.close();
+        //Use this to add new temperature
+        temperatureController.setTemperature(time, 37);
     }
     public void initialize(){
         action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
@@ -127,5 +126,8 @@ public class InputValuesController{
             selectedRows.add(row);
         }
         System.out.println(selectedRows);
+    }
+    public void setTemperatureController(TemperatureController tc) {
+        temperatureController = tc;
     }
 }

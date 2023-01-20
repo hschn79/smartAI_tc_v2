@@ -1,4 +1,4 @@
-package com.helena.imageJTest;
+package ImageAnalysis;
 import calc.Measurement;
 import java.time.LocalDateTime;
 

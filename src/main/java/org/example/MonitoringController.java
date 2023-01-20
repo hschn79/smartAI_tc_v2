@@ -10,13 +10,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import calc.GrowthContainer;
 
-public class SidePaneController implements Initializable, PropertyChangeListener {
+public class MonitoringController implements Initializable, PropertyChangeListener {
 
 	private XYChart.Series measurements;
 	
@@ -27,10 +26,9 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     	measurements = new XYChart.Series();
     	measurements.setName("Measurements");
         XYChart.Series series = new XYChart.Series();
-        series.setName("Data-Points");
+        series.setName("Measurement");
         series.getData().add(new XYChart.Data(LocalDateTime.now().toString(), 23));
         chartMonitoring.getData().add(series);
-        
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
     }

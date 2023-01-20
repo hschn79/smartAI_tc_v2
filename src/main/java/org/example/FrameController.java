@@ -29,6 +29,7 @@ public class FrameController {
 
     private Parent inputValues;
     private Parent monitoringParent;
+    private Parent temperatureParent;
 
     @FXML
     void shrinkMenu(MouseEvent event) {
@@ -62,13 +63,19 @@ public class FrameController {
 
     @FXML
     void toTemperature(MouseEvent event) {
-
+        sidepane.getChildren().clear();
+        sidepane.getChildren().add(temperatureParent);
     }
     public void initialize() throws IOException {
-        inputValues = loadFXML("inputValues");
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
+        inputValues = fxmlLoader.load();
+        InputValuesController ivc = fxmlLoader.getController();
         sidepane.getChildren().add(inputValues);
-        monitoringParent = loadFXML("sidepane");
-
+        monitoringParent = loadFXML("monitoring");
+        fxmlLoader = new FXMLLoader(App.class.getResource("temperature.fxml"));
+        temperatureParent = fxmlLoader.load();
+        TemperatureController tc = fxmlLoader.getController();
+        ivc.setTemperatureController(tc);
     }
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
