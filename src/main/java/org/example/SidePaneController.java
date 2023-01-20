@@ -73,7 +73,7 @@ public class SidePaneController implements Initializable, PropertyChangeListener
     public void PredictionOnUpdatedPhase(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{
     	try {
     		Prediction pred = new Prediction(0);			
-    		ArrayList<Prediction> list = pred.createPred(100, con); // I wanted to make createPred static but then it doesnt work for some reason
+    		ArrayList<Prediction> list = pred.createPred(5, con); // I wanted to make createPred static but then it doesnt work for some reason
     		
     		for(Prediction p : list) {
     			System.out.println("\n predicted confluency at " + p.getTime().toString() + " is: " + String.valueOf(p.getConf()));
