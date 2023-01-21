@@ -41,8 +41,8 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con, measurements);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
-    			//Measurement removed = e.getOldValue();
-    			//chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
+    			Measurement removed = (Measurement) e.getOldValue();
+    			chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdatedPhase(e,con);
     	}
