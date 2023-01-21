@@ -104,7 +104,7 @@ public class InputValuesController{
         table.getItems().clear();
         table.getItems().addAll(listRows);
         ImageJClass ij = new ImageJClass();
-        Measurement measure = ij.analyze(file.getPath(), LocalDateTime.now());
+        Measurement measure = ij.analyze(file.getPath(), time);
         rowMeasurementMap.put(row, measure);
         GrowthContainer container = GrowthContainer.instance();
         container.addMeasure(measure,true);
