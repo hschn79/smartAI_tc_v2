@@ -41,8 +41,8 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con, measurements);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
-    			Measurement removed = (Measurement) e.getOldValue();
-    			chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
+    		Measurement removed = (Measurement) e.getOldValue();
+    		chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdatedPhase(e,con);
     	}
@@ -64,7 +64,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     /** gibt nur prediction wenn mindestens 3 elemente enthalten sind
      * @param e
      * @param con
-     * macht momentan 100 predictions. 
+     * macht momentan 5 predictions. 
      * Problem: createPredictions in Prediction hat Problem
      */
     public void PredictionOnUpdatedPhase(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{

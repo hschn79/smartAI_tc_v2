@@ -25,11 +25,14 @@ public class Measurement implements Comparable<Measurement>{
 	
 	/**Calculates the growth rate by calculating the slope between DataPoints m1,m2 in % per hour
 	 * 
-	 * @param m1 first measurement
-	 * @param m2 2nd measurement
+	 * @param m1 1st measurement
+	 * @param m2 2nd measurement, i.e. has to be later
 	 * @return the growth rate in % per hour
 	 */
-	public static double calcGrowthRate(Measurement m1, Measurement m2) {
+	public static double calcGrowthRate(Measurement m1, Measurement m2) throws IllegalArgumentException{
+		if (m1.compareTo(m2)>0) {
+			throw new IllegalArgumentException("m1 has to be before m2");
+		}
     	double C1= m1.getConf();
     	double C2= m2.getConf();
     	LocalDateTime t1= m1.getTime();
@@ -59,7 +62,7 @@ public class Measurement implements Comparable<Measurement>{
         return conf;
     }
 
-    public void setType(double conf) {
+    public void setConf(double conf) {
         this.conf = conf;
     }
 
@@ -73,6 +76,7 @@ public class Measurement implements Comparable<Measurement>{
 
     /**
      *  note that we are only comparing by Time, not confluency and Time
+     *  returns -1 of this.time is before o.getTime, 0 if they are the same (up to at least minutes), 1 if this.time is after o.getTime()
      */
 	@Override
 	public int compareTo(Measurement o) {

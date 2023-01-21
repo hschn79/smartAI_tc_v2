@@ -59,8 +59,9 @@ public class Prediction {
 	 * Problem: final Time ist vor der Zeit der letzten Messung...
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
-		System.out.println("\n Compare Times \n");
+		System.out.println("\n Compare Times: \n last measurement \n");
 		System.out.println(con.getMeasure(con.getMListSize()-1).getTime());
+		System.out.println("\n calculated Final Time\n");
 		LocalDateTime temp = con.calcFinalTime();
 		System.out.println(temp);
 		System.out.println("\n End Compare Times\n");
