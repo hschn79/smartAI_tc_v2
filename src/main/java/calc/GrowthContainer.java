@@ -194,7 +194,6 @@ public class GrowthContainer implements Iterable<Measurement> {
     		if(rate > threshold) {
     			phase= GrowthPhase.LOG;
     			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
-    			System.out.println("Checkpoint updated Phase to Log");
     		} else {
     			phase=GrowthPhase.NOTLOG;
     		}

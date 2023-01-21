@@ -30,8 +30,8 @@ public class Measurement implements Comparable<Measurement>{
 	 * @return the growth rate in % per hour
 	 */
 	public static double calcGrowthRate(Measurement m1, Measurement m2) throws IllegalArgumentException{
-		if (m1.compareTo(m2)>0) {
-			throw new IllegalArgumentException("m1 has to be before m2");
+		if (m1.getTime().isAfter(m2.getTime())) {
+			throw new IllegalArgumentException("error calculating growth rate: m1 has to be before m2");
 		}
     	double C1= m1.getConf();
     	double C2= m2.getConf();
