@@ -2,7 +2,7 @@ package calc;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-public class Measurement {
+public class Measurement implements Comparable<Measurement>{
 	
 	private LocalDateTime time;
 	private double conf;
@@ -70,6 +70,14 @@ public class Measurement {
     public void setRate(double rate) {
         this.rate = rate;
     }
+
+    /**
+     *  note that we are only comparing by Time, not confluency and Time
+     */
+	@Override
+	public int compareTo(Measurement o) {
+		return this.time.compareTo(o.getTime());
+	}
 
 	
 }

@@ -1,5 +1,6 @@
 package calc;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	if(n==0) {
     		startTime=measure.getTime();
         	mlist.add(measure);
+        	Collections.sort(mlist);
     	} else if(mlist.contains(measure)) {
     		throw new IllegalArgumentException("measure already exists or time is sooner than start time");
     	} else {
