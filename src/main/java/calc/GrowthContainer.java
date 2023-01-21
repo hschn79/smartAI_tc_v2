@@ -92,7 +92,10 @@ public class GrowthContainer implements Iterable<Measurement> {
      * @param conf
      * @param update  use true if you also want to update rate and phase (recommended)
      */
-    public void addMeasure(double conf, boolean update) {
+    public void addMeasure(double conf, boolean update) throws IllegalArgumentException{
+    	if(conf>100) {
+    		throw new IllegalArgumentException("measured confluency is higher than 100");
+    	}
     	
     	LocalDateTime temp= mlist.get(mlist.size()-1).getTime().plusDays(2);
     	Measurement measure = new Measurement(conf,temp);
@@ -145,6 +148,10 @@ public class GrowthContainer implements Iterable<Measurement> {
      * @return final time as LocalDateTime
      * @throws IllegalStateException
      * @throws NumberFormatException
+     * 
+     * the double temp in this method is the difference between the last measure and the final time
+     * it is converted into seconds, note that if that difference is e.g. 1 day, then we have ~80000 for temp.
+     * that should cause any bufferoverflows but just to keep that in mind, this number can get quite big
      **/
     //für später: die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
   	public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
@@ -154,12 +161,14 @@ public class GrowthContainer implements Iterable<Measurement> {
   			throw new IllegalStateException("cells have not reached log phase");
   		}
   		
-  		temp = Math.log((0.9)/measure.getConf())/rate;
+  		temp = Math.log((90)/measure.getConf())/rate;		//90 weil die confluency ist double mit z.B. conf = 58,2 
+  		temp*=60*60;										//convert from hours to seconds
+  														
   		if (Double.isNaN(temp)||temp==0){
   			throw new NumberFormatException("error calculating the final time");
   		}
   		
-  		return measure.getTime().plusHours((long) temp);
+  		return measure.getTime().plusSeconds((long) temp);
   	}
   	
   	
