@@ -2,8 +2,8 @@ package org.example;
 /*
 cells_10	bei 	20-01-2023 17:47
 cells_30	bei 	23-01-2023 17:47
-cells_50	bei		23-01-2023 23:47
-cells_90	bei		24-01-2023 03:40
+cells_50	bei		24-01-2023 12:47
+cells_90	bei		25-01-2023 03:40
 */
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
