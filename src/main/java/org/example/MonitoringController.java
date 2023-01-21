@@ -21,7 +21,6 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 
 	private XYChart.Series measurements;
 	private FrameController frameController;
-	private XYChart.Series predictions;
 
     @FXML
     private LineChart<?, ?> chartMonitoring;
@@ -29,10 +28,6 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     public void initialize(URL url, ResourceBundle rb) {
     	measurements = new XYChart.Series();
     	measurements.setName("Measurements");
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Measurement");
-        series.getData().add(new XYChart.Data(LocalDateTime.now().toString(), 23));
-        chartMonitoring.getData().add(series);
         GrowthContainer con = GrowthContainer.instance();
         con.addPropertyChangeListener(this);
     }
@@ -56,20 +51,19 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con, measurements);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
+			//todo: wie Punkte aus diagram entfernen?
     		Measurement removed = (Measurement) e.getOldValue();
     		chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		PredictionOnUpdatedPhase(e,con);
     	}
-    		
-    		
-    		
-    	}
+	}
     
     public void MeasureOnAdded(GrowthContainer con, XYChart.Series measurements) {
 		int size = con.getMListSize() -1;
     	Measurement x = con.getMeasure(size);
     	measurements.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
+		System.out.println(measurements.getData());
     	chartMonitoring.getData().clear();
     	chartMonitoring.getData().add(measurements);
     }
@@ -84,25 +78,16 @@ public class MonitoringController implements Initializable, PropertyChangeListen
      */
     public void PredictionOnUpdatedPhase(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{
     	try {
-    		Prediction pred = new Prediction(0);			
+    		Prediction pred = new Prediction(0);
     		ArrayList<Prediction> list = pred.createPred(5, con); // I wanted to make createPred static but then it doesnt work for some reason
-    		
-    		for(Prediction p : list) {
-    			System.out.println("\n predicted confluency at " + p.getTime().toString() + " is: " + String.valueOf(p.getConf()));
-    		}
-
-    		predictions = new XYChart.Series();
+			XYChart.Series predictions = new XYChart.Series();
         	predictions.setName("Prediction");
         	for(Prediction x : list) {
         		predictions.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
-
-        		}
-        	boolean res = chartMonitoring.getData().add(predictions);
-        	if(res) {
-            	System.out.println("\n Checkpoint added predictions to Chart\n");
-
-        	}
-
+			}
+			System.out.println(predictions.getData());
+			// x.getConf is null so nothing is depicted
+        	chartMonitoring.getData().add(predictions);
     	} catch (IllegalArgumentException i) {
     		if(i.getMessage().contains("the specified container has not enough elements")){
     			System.out.println("\n in PREDICTION_ON_UPDATED_PHASE: " + i.getMessage() + "\n");

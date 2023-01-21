@@ -63,6 +63,8 @@ public class InputValuesController{
 
     @FXML
     void startMeasurement(MouseEvent event) {
+        // Todo: starte prediction hier!
+        // Property Change support changes
         if(listRows.size() < 3) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText("Add at least 3 pictures");
