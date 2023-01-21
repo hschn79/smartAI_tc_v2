@@ -1,6 +1,7 @@
 package org.example;
 
 import calc.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
