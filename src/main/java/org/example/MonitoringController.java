@@ -1,7 +1,6 @@
 package org.example;
 
 import calc.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
@@ -21,7 +20,8 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 
 	private XYChart.Series measurements;
 	private FrameController frameController;
-	
+	private XYChart.Series predictions;
+
     @FXML
     private LineChart<?, ?> chartMonitoring;
     @Override
@@ -42,19 +42,23 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 	public void setFrameController(FrameController fc) {
 		frameController = fc;
 	}
-    
+
     // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
     
+    /**
+     * Problem: PredictionOnUpdatedPhase hat ein Problem
+     * Problem: Zeile 49-50: wird nicht aus dem Diagramm gelöscht
+     */
     @Override
     public void propertyChange(PropertyChangeEvent e) {
     	GrowthContainer con = GrowthContainer.instance();
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con, measurements);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
-    			//Measurement removed = e.getOldValue();
-    			//chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
+    		Measurement removed = (Measurement) e.getOldValue();
+    		chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
-    		//PredictionOnUpdatedPhase(e,con);
+    		PredictionOnUpdatedPhase(e,con);
     	}
     		
     		
@@ -85,20 +89,24 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     		for(Prediction p : list) {
     			System.out.println("\n predicted confluency at " + p.getTime().toString() + " is: " + String.valueOf(p.getConf()));
     		}
-    		/*
-    		XYChart.Series predictions = new XYChart.Series();
+
+    		predictions = new XYChart.Series();
         	predictions.setName("Prediction");
         	for(Prediction x : list) {
         		predictions.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
-            	chartMonitoring.getData().add(predictions);
-            	System.out.println("\n Checkpoint add predictions to Chart\n");		
+
         		}
-        	*/
+        	boolean res = chartMonitoring.getData().add(predictions);
+        	if(res) {
+            	System.out.println("\n Checkpoint added predictions to Chart\n");
+
+        	}
+
     	} catch (IllegalArgumentException i) {
     		if(i.getMessage().contains("the specified container has not enough elements")){
-    			System.out.println("\n" + i.getMessage() + "\n");
+    			System.out.println("\n in PREDICTION_ON_UPDATED_PHASE: " + i.getMessage() + "\n");
     		} else {
-    			throw new IllegalArgumentException("Sth went wrong here: " + i.getMessage());
+    			throw new IllegalArgumentException("in PREDICTION_ON_UPDATED_PHASE: Sth went wrong here: " + i.getMessage());
     		}
     	}
     }	
