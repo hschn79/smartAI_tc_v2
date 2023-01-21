@@ -60,31 +60,35 @@ public class GrowthContainer implements Iterable<Measurement> {
 	
 	/**adds a new measurement to the container and updates phase&rate if necessary
 	*  notifies all listeners after a measurement has been added
-	*  if update is true then the Phase and growth rate are also updated
-	*  If this is the first measurement then the time will be LocalTime.now().
-	*  Otherwise it is set by the time in the method below
+	*  if update is true then the Phase and growth rate are also updated.
 	**/ 
     public void addMeasure(Measurement measure, boolean update) throws IllegalArgumentException{
-    	//define the point where you start measuring
-    	//henceforth this will mark the point t=0
     	int n = mlist.size();
     	if(n==0) {
     		startTime=measure.getTime();
-        	mlist.add(measure);
-        	Collections.sort(mlist);
     	} else if(mlist.contains(measure)) {
     		throw new IllegalArgumentException("measure already exists or time is sooner than start time");
-    	} else {
-    		addMeasure(measure.getConf(),update);
     	}
+    	
+    	mlist.add(measure);
+    	Collections.sort(mlist);
+    	
     	if(update) {
     		updatePhaseAndRate(threshold);	
     	}
     	changes.firePropertyChange("mlist add",null, measure);
     }
     
+    /**
+     * same thing as above but with no update
+     */
+    public void addMeasure(Measurement measure) {
+    	addMeasure(measure, false);
+    }
+    
+    
     /**USED FOR TESTING
-	 * the time of the added measurement is the time of the previous measurement + 3days
+     * adjusts the time of the measurement to be the time of the last one + 2 days
      * @param conf
      * @param update  use true if you also want to update rate and phase (recommended)
      */
@@ -101,12 +105,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     }
     
     
-    /**
-     * same thing as above but with no update
-     */
-    public void addMeasure(Measurement measure) {
-    	addMeasure(measure, false);
-    }
+    
 
     /**
      * removes a measurement and updates growth rate and phase
@@ -185,15 +184,17 @@ public class GrowthContainer implements Iterable<Measurement> {
     * Compares the most recent measurements
     **/
     public void updatePhaseAndRate(double threshold) {
-    	int n=this.mlist.size();
+    	int n=mlist.size();
     	double oldrate=this.getRate();
     	if(n>2) {	// if there are enough data points
-    		double temp = Measurement.calcGrowthRate(mlist.get(n-1),mlist.get(n-2)); //calculates growth rate of the most recent measurements
+    		double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
     		this.rate=temp;			
     		changes.firePropertyChange("updated Rate", oldrate, temp);
+    		System.out.println("updated Rate:" +  String.valueOf(rate));
     		if(rate > threshold) {
     			phase= GrowthPhase.LOG;
     			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
+    			System.out.println("Checkpoint updated Phase to Log");
     		} else {
     			phase=GrowthPhase.NOTLOG;
     		}
