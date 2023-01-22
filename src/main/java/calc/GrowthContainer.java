@@ -184,6 +184,11 @@ public class GrowthContainer implements Iterable<Measurement> {
     **/
     public void updatePhaseAndRate(double threshold) {
     	int n=mlist.size();
+    	if(n<=1) {
+    		this.rate=0;
+    		this.phase=GrowthPhase.NOTLOG;
+    		return;
+    	}
     	double oldrate=this.getRate();
     	double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
     	this.rate=temp;			
