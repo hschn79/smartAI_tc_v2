@@ -1,6 +1,8 @@
 package org.example;
 
 import calc.*;
+import javafx.event.ActionEvent;
+import java.util.Comparator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
@@ -24,8 +26,9 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 	private XYChart.Series measurements;
 	private FrameController frameController;
 	private LineChart<String,Number> chartMonitoring;
+	private XYChart.Series predictions;
 	private boolean allowMeasurements = true;
-
+	
 	@FXML
 	private GridPane gridpane;
 
@@ -47,6 +50,13 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 		chartMonitoring.setTitle("Confluency over Time");
 		gridpane.add(chartMonitoring, 1, 1);
     }
+    
+    @FXML
+    void reset(ActionEvent event)throws IOException {
+            frameController.reset();
+    }
+    
+    
 	public void setFrameController(FrameController fc) {
 		frameController = fc;
 	}
@@ -75,7 +85,9 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 			chartMonitoring.getData().add(measurements);
     		// this does not work: chartMonitoring.getData().remove();
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
-    		PredictionOnUpdatedPhase(e,con);
+    		//PredictionOnUpdatedPhase(e,con);
+    	}else if (e.getPropertyName().equals("start Predictions")) {
+    		PredictionStart(con);
     	}
 	}
     
@@ -117,11 +129,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
         	chartMonitoring.getData().addAll(predictions, deviation);
 			GrowthContainer container = GrowthContainer.instance();
 
-			// Set Values of output Field
-			//todo: set the other text fields
-			//todo: set temeperature tab
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			outputField.setText("Your cells will be ready at: " + container.calcFinalTime().format(formatter));
+			
     	} catch (IllegalArgumentException i) {
     		if(i.getMessage().contains("the specified container has not enough elements")){
     			System.out.println("\n in PREDICTION_ON_UPDATED_PHASE: " + i.getMessage() + "\n");
@@ -130,6 +138,77 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     		}
     	}
     }	
+    
+    /** nachdem start gedrückt wurde wird auf basis der vorletzten Messung Voraussagen erstellt & (hoffentlich) angezeigt.
+     *  Die letzte Voraussage ist zur gleichen Zeit wie die letzte (also aktuellste) Messung.
+     *  Diese beiden werden dann in evaluate verglichen
+     *
+     * @param con
+     * @throws IllegalArgumentException
+     */
+    public void PredictionStart(GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
+            
+            Measurement base = con.getMeasure(con.getMListSize()-2);
+            Measurement comp = con.getMeasure(con.getMListSize()-1);
+            
+            Prediction prediction = new Prediction(0);
+            //ArrayList<Prediction> list = prediction.createPred(5, base, con.getRate(), comp.getTime());  // I wanted to make createPred static but then it doesnt work for some reason
+            prediction = prediction.createPred(base, con.getRate(), comp.getTime());
+            System.out.println("Checkpoint MonitoringController->PredictionStart->Prediction ist:" + prediction.getTime().toString() +"      "+ prediction.getConf());
+            if(!prediction.getTime().isEqual(comp.getTime())) {
+                    throw new IllegalStateException("Berechnung haut net hin");
+            }
+            
+            this.predictions = new XYChart.Series();
+            this.predictions.setName("Prediction");
+            
+            
+            predictions.getData().add(new XYChart.Data(prediction.getTime().toString(),prediction.getConf()));
+            System.out.println("Checkpoint MonitoringController->PredictionStart->prediction wurde hinzugefügt");
+            chartMonitoring.getData().clear();
+            chartMonitoring.getData().add(measurements);
+            chartMonitoring.getData().add(predictions);
+            evaluate(comp,prediction,con.getRate());
+            
+            // Set Values of output Field
+         	//todo: set the other text fields
+         	//todo: set temeperature tab
+         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+         	outputField.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));            
+            
+            /*
+            for(Prediction x : list) {
+                predictions.getData().add(new XYChart.Data(x.getTime().toString(),x.getConf()));
+                //System.out.println(x.getConf()) -> nicht null müsste also gehen
+            }
+            System.out.println("Checkpoint MonitoringController->PredictionStart->predictions wurden erstellt");
+            System.out.println(predictions.getData());
+                chartMonitoring.getData().clear();
+                chartMonitoring.getData().add(measurements);
+            chartMonitoring.getData().add(predictions);
+            Comparator<XYChart.Data> locComp = (d1, d2) -> ((String) d1.getXValue()).compareTo((String) d2.getXValue()) ;
+            
+            //chartMonitoring.getData().sort(???);
+            */
+            
+    }
+    
+    private void evaluate(Measurement comp, Prediction prediction, double threshold) throws IllegalArgumentException{
+        if (!comp.getTime().isEqual(prediction.getTime())){
+                throw new IllegalArgumentException("in MonitoringController -> EVALUATE: Zeiten sind nicht gleich");
+        }else if(comp.getConf()-prediction.getConf() < threshold) {
+                System.out.println("You have to make the cells grow faster!");
+                
+        }else if (comp.getConf()-prediction.getConf() > threshold) {
+                System.out.println("You have to make the cells grow slower!");
+        }else {
+                System.out.println("Prediction and Measurement are in agreement!");
+        }
+        
+        
+}
+    
+    
 
 }
 

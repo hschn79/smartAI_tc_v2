@@ -1,6 +1,8 @@
 package org.example;
 
 import java.io.IOException;
+
+import calc.GrowthContainer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -96,5 +98,7 @@ public class FrameController {
         TemperatureController tc = fxmlLoader.getController();
         ivc.setController(tc, mc);
         mc.setFrameController(this);
+        GrowthContainer con =GrowthContainer.instance();
+        con.reset();
     }
 }

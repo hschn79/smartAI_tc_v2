@@ -39,8 +39,8 @@ public class Measurement implements Comparable<Measurement>{
     	LocalDateTime t1= m1.getTime();
     	LocalDateTime t2= m2.getTime();
     	Duration duration = Duration.between(t1, t2);
-    	return ((C2-C1)/(duration.toHours()));
-		//here we have confluency / hours
+    	return (Math.log(C2-C1)/(duration.toSeconds()));
+		//here we have confluency / Seconds
     }
 	//sets time as current time
 	public Measurement(double conf) { 
