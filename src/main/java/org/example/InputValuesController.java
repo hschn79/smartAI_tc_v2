@@ -72,6 +72,8 @@ public class InputValuesController{
         } else {
             addButton.setDisable(true);
             deleteButton.setDisable(true);
+            GrowthContainer con = GrowthContainer.instance();
+            con.startPredictions();
         }
 
     }

@@ -20,6 +20,66 @@ public class Prediction {
 		this.time=LocalDateTime.now();
 	}
 	
+	/** one prediction based on measurement at time endTime
+    *
+    * @param m1
+    * @param rate
+    * @param endTime
+    * @return
+    * @throws IllegalArgumentException
+    */
+   public Prediction createPred(Measurement m1, double rate, LocalDateTime endTime) throws IllegalArgumentException{
+           if(rate==0) {
+                   throw new IllegalArgumentException("in create Pred(measurement): rate is zero \n");
+           }
+           LocalDateTime m1Time=m1.getTime();
+           double m1Conf=m1.getConf();
+           
+           Duration duration=Duration.between(m1Time, endTime);
+           System.out.println("in Prediction->createPred(Measurement): Checkpoint: m1Conf " + m1Conf);
+           System.out.println("in Prediction->createPred(Measurement): Duration: " + duration.toSeconds() + " Rate: "+ rate);
+           double tempConf=m1Conf * Math.exp(rate * duration.toSeconds());
+           Prediction pred = new Prediction(tempConf,endTime);
+           return pred;
+           
+   }
+   
+   /** erzeugt basierend auf einer Messung n predictions, insbesondere eine bei endTime zum Vergleich mit einer neuen Messung
+   *
+   * @param n                                                                number of predictions
+   * @param m1                                                        measurement basis for predictions
+   * @param rate                                                        reference growth rate
+   * @param endTime                                                time where you want to compare the prediction with a new measurement
+   * @return                                                                list with pseudo-evenly spaced prediction, the last element is the one to be compared with a new measurement
+   * @throws IllegalArgumentException                if the growth rate is zero
+   */
+  public ArrayList<Prediction> createPred(int n, Measurement m1, double rate, LocalDateTime endTime) throws IllegalArgumentException{
+          
+          if(rate==0) {
+                  throw new IllegalArgumentException("in create Pred(measurement): rate is zero \n");
+          }
+          LocalDateTime m1Time=m1.getTime();
+          LocalDateTime tempTime;
+          double tempConf;
+          
+          ArrayList<Prediction> list = new ArrayList<>();
+          Duration BigInt = Duration.between(m1Time, endTime);
+          Duration SmallInt=BigInt.dividedBy(n);                // time intervall between points = SmallInt
+          System.out.println("IN CREATE_PRED (obere):");
+          System.out.println("Small Intervall: In Sekunden " + String.valueOf(SmallInt.toSeconds()) + " In Minuten: " + String.valueOf(SmallInt.toMinutes())+ " in Stunden " + String.valueOf(SmallInt.toHours()));
+          System.out.println("Big Intervall: In Sekunden " + String.valueOf(BigInt.toSeconds()) + " In Minuten: " + String.valueOf(BigInt.toMinutes())+ " in Stunden " + String.valueOf(BigInt.toHours()));
+          for(int i=1;i<n;i++) {
+                  tempTime= m1.getTime().plus(SmallInt.multipliedBy(i));
+                  tempConf = m1.getConf() * Math.exp(rate * SmallInt.multipliedBy(i).toSeconds());
+                  list.add(new Prediction(tempConf,tempTime));
+          }
+          //the last entry is done manually to ensure that its time matches endTime
+          tempTime=endTime;
+          tempConf=m1.getConf()*Math.exp(rate * BigInt.toSeconds());
+          list.add(new Prediction(tempConf,tempTime));
+          return list;
+  }
+	
 	
 	/**
 	 *
@@ -33,28 +93,13 @@ public class Prediction {
 		int size=con.getMListSize();
 		double rate=con.getRate();
 		Measurement m1= con.getMeasure(size-1);
-		rate/= 60*60;							//intern brauchen wir hier die Rate als %/sec
-		
 		if(size<2 || rate==0) {
-			throw new IllegalArgumentException("in create Pred: the specified container has not enough elements or rate is zero \n");
-		} else if(con.getPhase()!=GrowthPhase.LOG){
-			throw new IllegalStateException("in create Pred: the cells have not yet reached log phase \n");
+            throw new IllegalArgumentException("in create Pred (container): the specified container has not enough elements or rate is zero \n");
 		}
-		LocalDateTime m1Time=m1.getTime();
-		
-		ArrayList<Prediction> list = new ArrayList<>();
-		Duration BigInt = Duration.between(m1Time, endTime);
-		Duration SmallInt=BigInt.dividedBy(n);		// time intervall between points = SmallInt
-		System.out.println("IN CREATE_PRED (obere):");
-		System.out.println("Small Intervall: In Sekunden " + String.valueOf(SmallInt.toSeconds()) + " In Minuten: " + String.valueOf(SmallInt.toMinutes())+ " in Stunden " + String.valueOf(SmallInt.toHours())); 
-		System.out.println("Big Intervall: In Sekunden " + String.valueOf(BigInt.toSeconds()) + " In Minuten: " + String.valueOf(BigInt.toMinutes())+ " in Stunden " + String.valueOf(BigInt.toHours()));
-		for(int i=1;i<n;i++) {
-			LocalDateTime tempTime= m1.getTime().plus(SmallInt.multipliedBy(i));
-			double tempConf = m1.getConf() * Math.exp(rate * SmallInt.multipliedBy(i).toSeconds());
-			list.add(new Prediction(tempConf,tempTime));
-		}
-		return list;
+		return createPred(n, m1, rate, endTime);
 	}
+	
+	
 	
 	/**
 	 * Same thing as the previous one just with endTime=final Time (also wenn confluency~90%)
