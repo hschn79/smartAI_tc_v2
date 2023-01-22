@@ -161,9 +161,9 @@ public class MonitoringController implements Initializable, PropertyChangeListen
             
             this.predictions = new XYChart.Series();
             this.predictions.setName("Prediction");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             
-            
-            predictions.getData().add(new XYChart.Data(prediction.getTime().toString(),prediction.getConf()));
+            predictions.getData().add(new XYChart.Data(prediction.getTime().format(formatter).toString(),prediction.getConf()));
             System.out.println("Checkpoint MonitoringController->PredictionStart->prediction wurde hinzugefügt");
             chartMonitoring.getData().clear();
             chartMonitoring.getData().add(measurements);
@@ -173,7 +173,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
             // Set Values of output Field
          	//todo: set the other text fields
          	//todo: set temeperature tab
-         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            con.updatePhaseAndRate(con.getThreshold());
          	outputField.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));            
             
             /*
