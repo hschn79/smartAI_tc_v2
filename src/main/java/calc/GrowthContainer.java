@@ -137,13 +137,12 @@ public class GrowthContainer implements Iterable<Measurement> {
     //für später: die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
   	public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
   		double temp=0;
-  		Measurement measure=mlist.get(mlist.size()-1);
+  		Measurement measure=mlist.get(mlist.size()-2);
   		if(phase == GrowthPhase.NOTLOG) {
   			throw new IllegalStateException("cells have not reached log phase");
   		}
   		
-  		temp = Math.log((90)/measure.getConf())/rate;		//90 weil die confluency ist double mit z.B. conf = 58,2 
-  		temp*=60*60;										//convert from hours to seconds
+  		temp = Math.log((90)/measure.getConf())/rate;		//90 weil die confluency ist double mit z.B. conf = 58,2
   														
   		if (Double.isNaN(temp)||temp==0){
   			throw new NumberFormatException("error calculating the final time");
@@ -185,6 +184,11 @@ public class GrowthContainer implements Iterable<Measurement> {
     **/
     public void updatePhaseAndRate(double threshold) {
     	int n=mlist.size();
+    	if(n<=1) {
+    		this.rate=0;
+    		this.phase=GrowthPhase.NOTLOG;
+    		return;
+    	}
     	double oldrate=this.getRate();
     	double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
     	this.rate=temp;			
