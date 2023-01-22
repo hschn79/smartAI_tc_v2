@@ -179,8 +179,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
             // Set Values of output Field
          	//todo: set the other text fields
          	//todo: set temeperature tab
-         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-         	outputField.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));            
+         	finishedText.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));
             
             /*
             for(Prediction x : list) {
@@ -202,20 +201,22 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     private void evaluate(Measurement comp, Prediction prediction, double threshold) throws IllegalArgumentException{
         if (!comp.getTime().isEqual(prediction.getTime())){
                 throw new IllegalArgumentException("in MonitoringController -> EVALUATE: Zeiten sind nicht gleich");
-        }else if(comp.getConf()-prediction.getConf() < threshold) {
-                System.out.println("You have to make the cells grow faster!");
-                
-        }else if (comp.getConf()-prediction.getConf() > threshold) {
-                System.out.println("You have to make the cells grow slower!");
-        }else {
-                System.out.println("Prediction and Measurement are in agreement!");
-        }
-        
-        
-}
-    
-    
-
+        } else{
+			double dev = comp.getConf()-prediction.getConf();
+			devText.setText("Current Deviation: " + df.format(dev));
+			if(dev < threshold) {
+				System.out.println("You have to make the cells grow faster!");
+				temperatureController.setTemperature(1);
+				tempText.setText("Adjust temperature by: 1 °C");
+			}else if (comp.getConf()-prediction.getConf() > threshold) {
+				System.out.println("You have to make the cells grow slower!");
+				tempText.setText("Adjust temperature by: -1 °C");
+			}else {
+				System.out.println("Prediction and Measurement are in agreement!");
+				tempText.setText("Adjust temperature by: 0 °C");
+			}
+		}
+	}
 }
 
 

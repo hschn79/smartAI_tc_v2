@@ -98,6 +98,9 @@ public class InputValuesController{
             measurement = rowMeasurementMap.get(row);
             container.removeMeasure(measurement);
         }
+        if (listRows.size() < 4) {
+            addButton.setDisable(false);
+        }
         table.getItems().clear();
         table.getItems().addAll(listRows);
     }
@@ -123,8 +126,10 @@ public class InputValuesController{
             selectedRow(row);
         });
         listRows.add(row);
+        if(listRows.size() > 2) {
+            addButton.setDisable(true);
+        }
         table.getItems().clear();
-        table.setPlaceholder(new Label("No content in table"));
         table.getItems().addAll(listRows);
         ImageJClass ij = new ImageJClass();
         Measurement measure = ij.analyze(file.getPath(), time);
@@ -132,8 +137,6 @@ public class InputValuesController{
         GrowthContainer container = GrowthContainer.instance();
         container.addMeasure(measure,true);
         stage.close();
-        //Use this to add new temperature
-        //temperatureController.setTemperature(time, 0);
     }
     public void initialize(){
         action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
