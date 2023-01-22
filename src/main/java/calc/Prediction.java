@@ -39,6 +39,10 @@ public class Prediction {
            System.out.println("in Prediction->createPred(Measurement): Checkpoint: m1Conf " + m1Conf);
            System.out.println("in Prediction->createPred(Measurement): Duration: " + duration.toSeconds() + " Rate: "+ rate);
            double tempConf=m1Conf * Math.exp(rate * duration.toSeconds());
+           if(tempConf>100) {
+        	   tempConf=100;
+        	   System.out.println("in Prediction->createPred(Measurement)->tempConf>100, deswegen auf 100 gesetzt");
+           }
            Prediction pred = new Prediction(tempConf,endTime);
            return pred;
            
