@@ -1,7 +1,6 @@
 package org.example;
 
 import calc.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.CategoryAxis;
@@ -13,17 +12,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import org.jfree.chart.*;
-
-
 import calc.GrowthContainer;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -48,17 +40,13 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 		//Create chart
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
-		xAxis.setLabel("Datapoint");
+		xAxis.setLabel("Time");
 		yAxis.setLabel("Confluency in %");
 		//creating the chart
-		chartMonitoring = new LineChart<String,Number>(xAxis,yAxis);
+		chartMonitoring = new LineChart<>(xAxis,yAxis);
 		chartMonitoring.setTitle("Confluency over Time");
 		gridpane.add(chartMonitoring, 1, 1);
     }
-	@FXML
-	void reset(MouseEvent event)throws IOException {
-		frameController.reset();
-	}
 	public void setFrameController(FrameController fc) {
 		frameController = fc;
 	}
@@ -76,9 +64,16 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     		MeasureOnAdded(con);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
 			//todo: wie Punkte aus diagram entfernen?
-    		Measurement removed = (Measurement) e.getOldValue();
 			chartMonitoring.getData().clear();
-    		chartMonitoring.getData().remove(new XYChart.Data(removed.getTime(),removed.getConf()));
+			measurements.getData().clear();
+    		int size = con.getMListSize() - 1;
+			for(int i = 0; i <= size; i++) {
+				Measurement mTemp = con.getMeasure(i);
+				System.out.println("New measurement: " + mTemp.getTimeString() + " added");
+				measurements.getData().add(new XYChart.Data(mTemp.getTimeString(), mTemp.getConf()));
+			}
+			chartMonitoring.getData().add(measurements);
+    		// this does not work: chartMonitoring.getData().remove();
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		PredictionOnUpdatedPhase(e,con);
     	}
@@ -121,7 +116,10 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 			chartMonitoring.getData().remove(measurements);
         	chartMonitoring.getData().addAll(predictions, deviation);
 			GrowthContainer container = GrowthContainer.instance();
+
 			// Set Values of output Field
+			//todo: set the other text fields
+			//todo: set temeperature tab
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			outputField.setText("Your cells will be ready at: " + container.calcFinalTime().format(formatter));
     	} catch (IllegalArgumentException i) {

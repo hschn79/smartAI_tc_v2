@@ -42,6 +42,19 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
+            <Pane prefHeight="139.0" prefWidth="172.0" />
+            <Button mnemonicParsing="false" onMouseClicked="#reset" prefHeight="49.0" prefWidth="152.0" style="-fx-background-color: #3F4739;" text="Reset Application" textFill="WHITE">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="29.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@pictures/x.svg.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
          <effect>
             <DropShadow />

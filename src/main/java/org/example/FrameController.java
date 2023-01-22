@@ -80,6 +80,7 @@ public class FrameController {
         ivc.setController(tc, mc);
         mc.setFrameController(this);
     }
+    @FXML
     public void reset() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
         inputValues = fxmlLoader.load();

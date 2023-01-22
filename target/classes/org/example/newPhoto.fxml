@@ -79,7 +79,7 @@
             </VBox>
             <AnchorPane layoutX="25.0" layoutY="20.0" prefHeight="142.0" prefWidth="176.0" style="-fx-background-color: white; -fx-border-color: #5c6b51;">
                <children>
-                  <ImageView fx:id="fotodepictor" fitHeight="130.0" fitWidth="195.0" layoutX="-9.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #5c6b51;" />
+                  <ImageView fx:id="fotodepictor" fitHeight="139.0" fitWidth="185.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" style="-fx-border-color: #5c6b51;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                </children>
             </AnchorPane>
          </children>
