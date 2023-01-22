@@ -44,6 +44,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 		yAxis.setLabel("Confluency in %");
 		//creating the chart
 		chartMonitoring = new LineChart<>(xAxis,yAxis);
+		chartMonitoring.setAnimated(false);
 		chartMonitoring.setTitle("Confluency over Time");
 		gridpane.add(chartMonitoring, 1, 1);
     }
@@ -64,7 +65,6 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     		MeasureOnAdded(con);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
 			//todo: wie Punkte aus diagram entfernen?
-			chartMonitoring.getData().clear();
 			measurements.getData().clear();
     		int size = con.getMListSize() - 1;
 			for(int i = 0; i <= size; i++) {
@@ -72,6 +72,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 				System.out.println("New measurement: " + mTemp.getTimeString() + " added");
 				measurements.getData().add(new XYChart.Data(mTemp.getTimeString(), mTemp.getConf()));
 			}
+			chartMonitoring.getData().clear();
 			chartMonitoring.getData().add(measurements);
     		// this does not work: chartMonitoring.getData().remove();
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {

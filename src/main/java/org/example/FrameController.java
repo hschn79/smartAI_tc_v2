@@ -82,6 +82,7 @@ public class FrameController {
     }
     @FXML
     public void reset() throws IOException {
+        //todo: auch die logik reseten
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("inputValues.fxml"));
         inputValues = fxmlLoader.load();
         InputValuesController ivc = fxmlLoader.getController();

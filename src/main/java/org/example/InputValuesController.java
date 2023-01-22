@@ -138,6 +138,7 @@ public class InputValuesController{
         picture.setCellValueFactory(new PropertyValueFactory<Row, String>("picture"));
         time.setCellValueFactory(new PropertyValueFactory<Row, String>("time"));
         table.getItems().addAll(listRows);
+        table.setPlaceholder(new Label("No content added"));
     }
     private void selectedRow(Row row) {
         if(selectedRows.contains(row)) {
