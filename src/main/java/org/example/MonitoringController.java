@@ -2,6 +2,8 @@ package org.example;
 
 import calc.*;
 import javafx.event.ActionEvent;
+
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,15 +27,23 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 
 	private XYChart.Series measurements;
 	private FrameController frameController;
+	private TemperatureController temperatureController;
 	private LineChart<String,Number> chartMonitoring;
 	private XYChart.Series predictions;
 	private boolean allowMeasurements = true;
+	private static final DecimalFormat df = new DecimalFormat("0.00");
 	
 	@FXML
 	private GridPane gridpane;
 
 	@FXML
-	private Text outputField;
+	private Text devText;
+
+	@FXML
+	private Text finishedText;
+
+	@FXML
+	private Text tempText;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
     	measurements = new XYChart.Series();
@@ -52,14 +62,10 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 		gridpane.add(chartMonitoring, 1, 1);
     }
     
-    @FXML
-    void reset(ActionEvent event)throws IOException {
-            frameController.reset();
-    }
     
-    
-	public void setFrameController(FrameController fc) {
+	public void setController(FrameController fc, TemperatureController tc) {
 		frameController = fc;
+		temperatureController = tc;
 	}
 
     // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
@@ -74,17 +80,14 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	if(e.getPropertyName().equals("mlist add")) {
     		MeasureOnAdded(con);
     	}else if (e.getPropertyName().equals("mlist rmv")) {
-			//todo: wie Punkte aus diagram entfernen?
 			measurements.getData().clear();
     		int size = con.getMListSize() - 1;
 			for(int i = 0; i <= size; i++) {
 				Measurement mTemp = con.getMeasure(i);
-				System.out.println("New measurement: " + mTemp.getTimeString() + " added");
 				measurements.getData().add(new XYChart.Data(mTemp.getTimeString(), mTemp.getConf()));
 			}
 			chartMonitoring.getData().clear();
 			chartMonitoring.getData().add(measurements);
-    		// this does not work: chartMonitoring.getData().remove();
     	}else if (e.getPropertyName().equals("updated Phase to Log")) {
     		//PredictionOnUpdatedPhase(e,con);
     	}else if (e.getPropertyName().equals("start Predictions")) {
@@ -164,7 +167,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
             this.predictions.setName("Prediction");
             
             
-            predictions.getData().add(new XYChart.Data(prediction.getTime().toString(),prediction.getConf()));
+            predictions.getData().add(new XYChart.Data(prediction.getTimeString(),prediction.getConf()));
             System.out.println("Checkpoint MonitoringController->PredictionStart->prediction wurde hinzugefügt");
             chartMonitoring.getData().clear();
             chartMonitoring.getData().add(measurements);
@@ -175,7 +178,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
          	//todo: set the other text fields
          	//todo: set temeperature tab
          	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-         	outputField.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));            
+         	finishedText.setText("Your cells will be ready at: " + con.calcFinalTime().format(formatter));
             
             /*
             for(Prediction x : list) {
@@ -197,20 +200,24 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     private void evaluate(Measurement comp, Prediction prediction, double threshold) throws IllegalArgumentException{
         if (!comp.getTime().isEqual(prediction.getTime())){
                 throw new IllegalArgumentException("in MonitoringController -> EVALUATE: Zeiten sind nicht gleich");
-        }else if(comp.getConf()-prediction.getConf() < threshold) {
-                System.out.println("You have to make the cells grow faster!");
-                
-        }else if (comp.getConf()-prediction.getConf() > threshold) {
-                System.out.println("You have to make the cells grow slower!");
-        }else {
-                System.out.println("Prediction and Measurement are in agreement!");
-        }
-        
-        
-}
-    
-    
-
+        } else {
+			double dev = comp.getConf() - prediction.getConf();
+			devText.setText("Current Deviation: " + df.format(dev));
+			if(comp.getConf()-prediction.getConf() < threshold) {
+				temperatureController.setTemperature(1);
+				tempText.setText("Adjust temperature by: 1 °C");
+				System.out.println("You have to make the cells grow faster!");
+			}else if (comp.getConf()-prediction.getConf() > threshold) {
+				System.out.println("You have to make the cells grow slower!");
+				temperatureController.setTemperature(-1);
+				tempText.setText("Adjust temperature by: -1 °C");
+			}else {
+				temperatureController.setTemperature(0);
+				System.out.println("Prediction and Measurement are in agreement!");
+				tempText.setText("Adjust temperature by: 0 °C");
+			}
+		}
+	}
 }
 
 

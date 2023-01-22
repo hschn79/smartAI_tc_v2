@@ -1,5 +1,6 @@
 package org.example;
 
+import calc.GrowthContainer;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -8,19 +9,32 @@ import java.time.LocalDateTime;
 
 public class TemperatureController {
 
-    private XYChart.Series measurements;
+    private XYChart.Series measurements = new XYChart.Series();
 
     @FXML
     private LineChart<?, ?> lineChart;
 
-    public void setTemperature(LocalDateTime time, int temp) {
-        measurements = new XYChart.Series();
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Measurement");
-        series.getData().add(new XYChart.Data(time.toString(), temp));
-        lineChart.getData().add(series);
+    private int currentTemperature = 32;
+
+    public void setTemperature(int tempChange) {
+
+        GrowthContainer con = GrowthContainer.instance();
+        int size = con.getMListSize();
+        measurements.getData().clear();
+        for(int i = 0; i < size; i++) {
+            if(i < size -1) {
+                measurements.getData().add(new XYChart.Data(con.getMeasure(i).getTimeString(), currentTemperature));
+            } else {
+                currentTemperature = currentTemperature + tempChange;
+                measurements.getData().add(new XYChart.Data(con.getMeasure(i).getTimeString(), currentTemperature));
+            }
+        }
+        lineChart.getData().clear();
+        lineChart.getData().add(measurements);
     }
     public void initialize() {
-
+        measurements = new XYChart.Series();
+        measurements.setName("Temperatures");
+        lineChart.setAnimated(false);
     }
 }

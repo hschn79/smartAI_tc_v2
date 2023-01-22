@@ -80,7 +80,7 @@ public class FrameController {
         temperatureParent = fxmlLoader.load();
         TemperatureController tc = fxmlLoader.getController();
         ivc.setController(tc, mc);
-        mc.setFrameController(this);
+        mc.setController(this, tc);
     }
     @FXML
     public void reset() throws IOException {
@@ -98,7 +98,7 @@ public class FrameController {
         temperatureParent = fxmlLoader.load();
         TemperatureController tc = fxmlLoader.getController();
         ivc.setController(tc, mc);
-        mc.setFrameController(this);
+        mc.setController(this, tc);
         GrowthContainer con =GrowthContainer.instance();
         con.reset();
     }

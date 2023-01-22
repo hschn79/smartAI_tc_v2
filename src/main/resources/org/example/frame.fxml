@@ -50,7 +50,7 @@
                <graphic>
                   <ImageView fitHeight="29.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@pictures/x.svg.png" />
+                        <Image url="@pictures/x.png" />
                      </image>
                   </ImageView>
                </graphic>

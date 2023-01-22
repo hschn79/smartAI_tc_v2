@@ -24,7 +24,7 @@
           <CategoryAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis autoRanging="false" lowerBound="28.0" side="LEFT" upperBound="40.0" />
         </yAxis>
       </LineChart>
    </children>

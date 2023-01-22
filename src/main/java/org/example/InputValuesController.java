@@ -124,6 +124,7 @@ public class InputValuesController{
         });
         listRows.add(row);
         table.getItems().clear();
+        table.setPlaceholder(new Label("No content in table"));
         table.getItems().addAll(listRows);
         ImageJClass ij = new ImageJClass();
         Measurement measure = ij.analyze(file.getPath(), time);
@@ -132,7 +133,7 @@ public class InputValuesController{
         container.addMeasure(measure,true);
         stage.close();
         //Use this to add new temperature
-        temperatureController.setTemperature(time, 37);
+        //temperatureController.setTemperature(time, 0);
     }
     public void initialize(){
         action.setCellValueFactory(new PropertyValueFactory<Row, String>("action"));
