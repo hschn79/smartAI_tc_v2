@@ -1,5 +1,6 @@
 package calc;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.Duration;import calc.GrowthContainer;
@@ -79,6 +80,10 @@ public class Prediction {
 	public LocalDateTime getTime() {
         return time;
     }
+	public String getTimeString() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		return time.format(formatter);
+	}
 
     public void setTime(LocalDateTime time) {
         this.time = time;

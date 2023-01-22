@@ -61,7 +61,7 @@ public class NewPhotoController {
             alert.setContentText("File or Time Input Missing!");
             alert.show();
         } else {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             try {
                 LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
                 ivc.initializeTable(fileNamePanel.getText(), file, dateTime);

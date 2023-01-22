@@ -1,6 +1,7 @@
 package calc;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Measurement implements Comparable<Measurement>{
 	
@@ -53,6 +54,10 @@ public class Measurement implements Comparable<Measurement>{
 	
     public LocalDateTime getTime() {
         return time;
+    }
+    public String getTimeString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");;
+        return time.format(formatter);
     }
     
     public void setTime(LocalDateTime time) {

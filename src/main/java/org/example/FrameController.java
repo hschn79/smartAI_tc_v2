@@ -87,6 +87,8 @@ public class FrameController {
         sidepane.getChildren().add(inputValues);
         fxmlLoader = new FXMLLoader(App.class.getResource("monitoring.fxml"));
         monitoringParent = fxmlLoader.load();
+        sidepane.getChildren().clear();
+        sidepane.getChildren().add(inputValues);
         MonitoringController mc = fxmlLoader.getController();
         fxmlLoader = new FXMLLoader(App.class.getResource("temperature.fxml"));
         temperatureParent = fxmlLoader.load();
