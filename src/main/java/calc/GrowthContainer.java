@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.*;
 
-
+//test
 public class GrowthContainer implements Iterable<Measurement> {
 	
 	private static GrowthContainer unique = null;
@@ -38,25 +38,6 @@ public class GrowthContainer implements Iterable<Measurement> {
 		return unique;
 	}
 	
-	public int getMListSize(){
-		return mlist.size();
-	}
-	
-	public Iterator<Measurement> iterator() {
-		return this.mlist.iterator();
-	}
-
-	public ArrayList<Measurement> getMList() {
-        return mlist;
-    }
-	
-	public double getRate() {
-		return rate;
-	}
-
-	public GrowthPhase getPhase() {
-    	return phase;
-    }
 	
 	/**adds a new measurement to the container and updates phase&rate if necessary
 	*  notifies all listeners after a measurement has been added
@@ -72,8 +53,8 @@ public class GrowthContainer implements Iterable<Measurement> {
     	
     	mlist.add(measure);
     	Collections.sort(mlist);
-    	
-    	if(update) {
+    	n=mlist.size();
+    	if(update && n==2) {
     		updatePhaseAndRate(threshold);	
     	}
     	changes.firePropertyChange("mlist add",null, measure);
@@ -184,7 +165,17 @@ public class GrowthContainer implements Iterable<Measurement> {
     	changes.removePropertyChangeListener(l);
     }
     
-    
+    public void startPredictions() {
+        changes.firePropertyChange("start Predictions", false, true);
+    }
+
+
+    public void reset() {
+        	rate=0;
+        	mlist.clear();
+        	phase = GrowthPhase.NOTLOG;
+        	startTime=null;
+    }
     
     
     
@@ -195,20 +186,43 @@ public class GrowthContainer implements Iterable<Measurement> {
     public void updatePhaseAndRate(double threshold) {
     	int n=mlist.size();
     	double oldrate=this.getRate();
-    	if(n>2) {	// if there are enough data points
-    		double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
-    		this.rate=temp;			
-    		changes.firePropertyChange("updated Rate", oldrate, temp);
-    		System.out.println("updated Rate:" +  String.valueOf(rate));
-    		if(rate > threshold) {
-    			phase= GrowthPhase.LOG;
-    			changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
-    		} else {
-    			phase=GrowthPhase.NOTLOG;
-    		}
+    	double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
+    	this.rate=temp;			
+    	changes.firePropertyChange("updated Rate", oldrate, temp);
+    	System.out.println("updated Rate:" +  String.valueOf(rate));
+    	if(rate > threshold) {
+    		phase= GrowthPhase.LOG;
+    		changes.firePropertyChange("updated Phase to Log", GrowthPhase.NOTLOG, GrowthPhase.LOG);
+    	} else {
+    		phase=GrowthPhase.NOTLOG;
     	}
     	
     }
-    
+   
+    public int getMListSize(){
+		return mlist.size();
+	}
 	
+	public Iterator<Measurement> iterator() {
+		return this.mlist.iterator();
+	}
+
+	public ArrayList<Measurement> getMList() {
+        return mlist;
+    }
+	
+	public double getRate() {
+		return rate;
+	}
+
+	public GrowthPhase getPhase() {
+    	return phase;
+    }
+	
+	public double getThreshold() {
+		return threshold;
+	}
+	
+    
+    
 }
