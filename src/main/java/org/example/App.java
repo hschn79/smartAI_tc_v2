@@ -1,9 +1,19 @@
 package org.example;
 /*
+ * meist getestet
 cells_10	bei 	20-01-2023 17:47
 cells_30	bei 	23-01-2023 17:47
-cells_50	bei		24-01-2023 12:47
-cells_90	bei		25-01-2023 03:40
+cells_50	bei		24-01-2023 02:47
+
+Immer 1h zwischendurch
+cells_10	bei 	20-01-2023 17:47
+cells_30	bei 	20-01-2023 18:47
+cells_50	bei		20-01-2023 19:47
+
+Immer 1h zwischendurch und okayes ergebnis
+cells_10	bei 	20-01-2023 17:47
+cells_30	bei 	20-01-2023 18:47
+cells_50	bei		20-01-2023 19:47
 */
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
