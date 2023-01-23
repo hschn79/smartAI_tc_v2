@@ -9,7 +9,13 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.math.*;
 
-//test
+/** operational interface, containing and managing all measurements
+ * 
+ * @author Lukas
+ * @threshold is the parameter used to differentiate log phase from other phases. If the growth rate is higher than this number, 
+ * the phase is updated to log phase (and vice versa). Also functions as tolerance for evaluation.
+ * In future version we distinguish evaluation from phase change and determine both these thresholds by examining the first few measurements.
+ */
 public class GrowthContainer implements Iterable<Measurement> {
 	
 	private static GrowthContainer unique = null;
@@ -31,6 +37,10 @@ public class GrowthContainer implements Iterable<Measurement> {
 		mlist = new ArrayList<Measurement>();
 	}
 	
+	/**
+	 * 
+	 * @return since only one container can exist, it either returns an empty container or the current one
+	 */
 	public static GrowthContainer instance() {
 		if(unique==null) {
 			unique = new GrowthContainer();
@@ -42,6 +52,7 @@ public class GrowthContainer implements Iterable<Measurement> {
 	/**adds a new measurement to the container and updates phase&rate if necessary
 	*  notifies all listeners after a measurement has been added
 	*  if update is true then the Phase and growth rate are also updated.
+	*  @throws IllegalArgumentException, if measure already exists in the container
 	**/ 
     public void addMeasure(Measurement measure, boolean update) throws IllegalArgumentException{
     	int n = mlist.size();
@@ -111,10 +122,22 @@ public class GrowthContainer implements Iterable<Measurement> {
     }
     
     
+    /**
+     * 
+     * @param index of measurement
+     * @return the measurement at the specified index
+     */
     public Measurement getMeasure(int index){
     	return mlist.get(index);
     }
     
+    /**
+     * 
+     * @param time
+     * @param conf
+     * @return the specified Measurement
+     * @throws IllegalArgumentException if the specified measure doesnt exist in the container
+     */
     public Measurement getMeasure(LocalDateTime time, double conf) throws IllegalArgumentException{
     	int index = mlist.indexOf(new Measurement(time, conf));
     	if(index == -1) {
@@ -132,10 +155,11 @@ public class GrowthContainer implements Iterable<Measurement> {
      * 
      * the double temp in this method is the difference between the last measure and the final time
      * it is converted into seconds, note that if that difference is e.g. 1 day, then we have ~80000 for temp.
-     * that should cause any bufferoverflows but just to keep that in mind, this number can get quite big
+     * that should'nt cause any bufferoverflows but just to keep that in mind, this number can get quite big
+     * @throws NumberFormatExceptionif there was an issue calculating the final time
+     * @throws IllegalStateException growth phase is NOTLOG
      **/
-    //für später: die zeit zu ders fertig sein soll ist die erste errechnete Final time (also nachdem zwei datenpunkte eingegeben wurden)
-  	public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
+    public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
   		double temp=0;
   		Measurement measure=mlist.get(mlist.size()-2);
   		if(phase == GrowthPhase.NOTLOG) {
@@ -155,20 +179,32 @@ public class GrowthContainer implements Iterable<Measurement> {
   	
 
   	
-    
+    /**
+     * use this method to get a PropertyChangeEvent if the contents in the container get manipulated
+     * @param l the specific listener
+     */
     public void addPropertyChangeListener(PropertyChangeListener l) {
     	changes.addPropertyChangeListener(l);
     }
     
+    /**
+     * remove the Listener previously added
+     * @param l the specific listener
+     */
     public void removePropertyChangeListener(PropertyChangeListener l) {
     	changes.removePropertyChangeListener(l);
     }
     
+    /**
+     * used exclusively by MonitoringController to forward user inputs to the graphical interface
+     */
     public void startPredictions() {
         changes.firePropertyChange("start Predictions", false, true);
     }
 
-
+    /**
+     * resets the growthcontainer, i.e. the next method call of container.instance() is the same as when you called it the first time
+     */
     public void reset() {
         	rate=0;
         	mlist.clear();
@@ -178,9 +214,9 @@ public class GrowthContainer implements Iterable<Measurement> {
     
     
     
-    /**updates phase and rate
+    /**updates Growthphase and Growthrate
     * If new growth rate is higher than some threshold -> log phase
-    * Compares the most recent measurements
+    * Compares the most recent measurements in this container
     **/
     public void updatePhaseAndRate(double threshold) {
     	int n=mlist.size();

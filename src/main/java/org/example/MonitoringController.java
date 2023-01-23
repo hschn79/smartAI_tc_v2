@@ -71,8 +71,12 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     // LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) "1",23
     
     /**
-     * Problem: PredictionOnUpdatedPhase hat ein Problem
-     * Problem: Zeile 49-50: wird nicht aus dem Diagramm gelöscht
+     * If notified by the GrowthContainer, this will do one of three things:
+     * 1) add a measurement to the graph that was added to the container
+     * 2) same as 1) but with a removed measurement
+     * 3) start generating Predictions and displaying them on the chart, forwarded from container. Will also evaluate 
+     *    the comparison of the latest measurement with the appropriate prediction
+     * 4) in future versions, multiple predictions could be generated everytime a measurement is added
      */
     @Override
     public void propertyChange(PropertyChangeEvent e) {
@@ -97,6 +101,10 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	}
 	}
     
+    /**
+     * displays the last measurement in con to the chart
+     * @param con the container the measurement was added to
+     */
     public void MeasureOnAdded(GrowthContainer con) {
 		if(allowMeasurements) {
 			System.out.println("Measurement added");
@@ -111,11 +119,11 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     
     
     
-    /** gibt nur prediction wenn mindestens 3 elemente enthalten sind
-     * @param e
-     * @param con
-     * macht momentan 100 predictions. 
-     * Problem: createPredictions in Prediction hat Problem
+    /** generates Predictions based on the second to last measurement in con and in future versions adds them to the screen
+     * the last generated prediction will always be at the time of the latest measurement in con
+     * @param con to read the last measurement from
+     * currently it will generate 5 evenly spaced predictions
+     * @throws IllegalArgumentException if con has less than three elements or something went wrong in pipelining
      */
     public void PredictionOnUpdatedPhase(PropertyChangeEvent e, GrowthContainer con) throws IllegalArgumentException{
     	try {
@@ -145,14 +153,15 @@ public class MonitoringController implements Initializable, PropertyChangeListen
     	}
     }	
     
-    /** nachdem start gedrückt wurde wird auf basis der vorletzten Messung Voraussagen erstellt & (hoffentlich) angezeigt.
-     *  Die letzte Voraussage ist zur gleichen Zeit wie die letzte (also aktuellste) Messung.
-     *  Diese beiden werden dann in evaluate verglichen
+    /** after start is pressed, predictions are created & (hopefully) displayed based on the penultimate measurement.
+     *  The last prediction is at the same time as the last (i.e. most recent) measurement.
+     *  These two are then compared in evaluate().
      *
-     * @param con
-     * @throws IllegalArgumentException
+     * @param con to read the base and compare measurement from
+     * @throws IllegalStateException if something went wrong in calculating the prediction
+     * The base measurement is the one to be used for generating the prediction, while the comp measurement is used for evaluation
      */
-    public void PredictionStart(GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
+    public void PredictionStart(GrowthContainer con) throws IllegalStateException{
             
             Measurement base = con.getMeasure(con.getMListSize()-2);
             Measurement comp = con.getMeasure(con.getMListSize()-1);
@@ -198,6 +207,13 @@ public class MonitoringController implements Initializable, PropertyChangeListen
             
     }
     
+    /**
+     * 
+     * @param comp updated measurement
+     * @param prediction to compare with the updated measurement
+     * @param threshold determines the toleranz, within wich the prediction and measurement are interpreted as in agreement
+     * @throws IllegalArgumentException if the times of prediction an comp dont match
+     */
     private void evaluate(Measurement comp, Prediction prediction, double threshold) throws IllegalArgumentException{
         if (!comp.getTime().isEqual(prediction.getTime())){
                 throw new IllegalArgumentException("in MonitoringController -> EVALUATE: Zeiten sind nicht gleich");
