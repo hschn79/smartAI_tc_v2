@@ -1,7 +1,5 @@
 package org.example;
 
-
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 
@@ -9,10 +7,22 @@ import java.time.LocalDateTime;
 
 
 public class Row {
-    private String filename;
+    /**
+     * Used as a model class for the display of data in the rows of
+     * the tale in inputvalues controller
+     */
+    private final String filename;
     private LocalDateTime time;
-    private ImageView picture;
-    private CheckBox action;
+    private final ImageView picture;
+    private final CheckBox action;
+
+    /**
+     * default constructor
+     * @param filename of the photo
+     * @param time of photo
+     * @param picture file
+     * @param action checkbox for selection of rows
+     */
 
     public Row(String filename, LocalDateTime time, ImageView picture, CheckBox action) {
         this.filename = filename;
@@ -21,35 +31,11 @@ public class Row {
         this.action = action;
     }
 
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
     public LocalDateTime getTime() {
         return time;
     }
 
     public void setTime(LocalDateTime time) {
         this.time = time;
-    }
-
-    public ImageView getPicture() {
-        return picture;
-    }
-
-    public void setPicture(ImageView picture) {
-        this.picture = picture;
-    }
-
-    public CheckBox getAction() {
-        return action;
-    }
-
-    public void setAction(CheckBox action) {
-        this.action = action;
     }
 }

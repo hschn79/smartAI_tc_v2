@@ -70,15 +70,15 @@ public class GrowthContainer implements Iterable<Measurement> {
     	}
     	changes.firePropertyChange("mlist add",null, measure);
     }
-    
+
     /**
      * same thing as above but with no update
      */
     public void addMeasure(Measurement measure) {
     	addMeasure(measure, false);
     }
-    
-    
+
+
     /**USED FOR TESTING
      * adjusts the time of the measurement to be the time of the last one + 2 days
      * @param conf
@@ -88,19 +88,19 @@ public class GrowthContainer implements Iterable<Measurement> {
     	if(conf>100) {
     		throw new IllegalArgumentException("measured confluency is higher than 100");
     	}
-    	
+
     	LocalDateTime temp= mlist.get(mlist.size()-1).getTime().plusDays(2);
     	Measurement measure = new Measurement(conf,temp);
     	mlist.add(measure);
     	if(update) {
-    		updatePhaseAndRate(threshold);	
+    		updatePhaseAndRate(threshold);
     	}
     	changes.firePropertyChange("mlist add",null, measure);
-    	
+
     }
-    
-    
-    
+
+
+
 
     /**
      * removes a measurement and updates growth rate and phase
@@ -114,13 +114,13 @@ public class GrowthContainer implements Iterable<Measurement> {
     	}
     	return res;
     }
-    
+
     //removes the measurement specified by conf and time
     //returns true if the measure was found in the list
     public boolean removeMeasure(double conf, LocalDateTime time) {
     	return removeMeasure(new Measurement(conf, time));
     }
-    
+
     
     /**
      * 
@@ -130,9 +130,9 @@ public class GrowthContainer implements Iterable<Measurement> {
     public Measurement getMeasure(int index){
     	return mlist.get(index);
     }
-    
+
     /**
-     * 
+     *
      * @param time
      * @param conf
      * @return the specified Measurement
@@ -145,18 +145,18 @@ public class GrowthContainer implements Iterable<Measurement> {
     	}
     	return mlist.get(index);
     }
-    
-    
+
+
     /**
      * estimates the time it takes to reach 90% confluency based on the last measurement and current growth rate
      * @return final time as LocalDateTime
      * @throws IllegalStateException
      * @throws NumberFormatException
-     * 
+     *
      * the double temp in this method is the difference between the last measure and the final time
      * it is converted into seconds, note that if that difference is e.g. 1 day, then we have ~80000 for temp.
      * that should'nt cause any bufferoverflows but just to keep that in mind, this number can get quite big
-     * @throws NumberFormatExceptionif there was an issue calculating the final time
+     * @throws NumberFormatException if there was an issue calculating the final time
      * @throws IllegalStateException growth phase is NOTLOG
      **/
     public LocalDateTime calcFinalTime() throws IllegalStateException, NumberFormatException{
@@ -186,7 +186,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     public void addPropertyChangeListener(PropertyChangeListener l) {
     	changes.addPropertyChangeListener(l);
     }
-    
+
     /**
      * remove the Listener previously added
      * @param l the specific listener
@@ -227,7 +227,7 @@ public class GrowthContainer implements Iterable<Measurement> {
     	}
     	double oldrate=this.getRate();
     	double temp = Measurement.calcGrowthRate(mlist.get(n-2),mlist.get(n-1)); //calculates growth rate of the most recent measurements
-    	this.rate=temp;			
+    	this.rate=temp;
     	changes.firePropertyChange("updated Rate", oldrate, temp);
     	System.out.println("updated Rate:" +  String.valueOf(rate));
     	if(rate > threshold) {
@@ -250,7 +250,7 @@ public class GrowthContainer implements Iterable<Measurement> {
 	public ArrayList<Measurement> getMList() {
         return mlist;
     }
-	
+
 	public double getRate() {
 		return rate;
 	}
@@ -258,11 +258,11 @@ public class GrowthContainer implements Iterable<Measurement> {
 	public GrowthPhase getPhase() {
     	return phase;
     }
-	
+
 	public double getThreshold() {
 		return threshold;
 	}
-	
-    
-    
+
+
+
 }
