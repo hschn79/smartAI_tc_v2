@@ -1,11 +1,16 @@
 package calc;
 
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.time.Duration;import calc.GrowthContainer;
 
-// might be worth doing "extends Measurement"
+/**
+ * similar to Measurement, a prediction has both a predicted confluency and time.
+ * For future versions it might be helpful to combine Measurement and Prediction into one abstract class.
+ * @author Lukas
+ */
 public class Prediction {
 	private double conf;
 	private LocalDateTime time;
@@ -25,7 +30,7 @@ public class Prediction {
     * @param m1
     * @param rate
     * @param endTime
-    * @return
+    * @return the desired Prediction
     * @throws IllegalArgumentException
     */
    public Prediction createPred(Measurement m1, double rate, LocalDateTime endTime) throws IllegalArgumentException{
@@ -48,7 +53,7 @@ public class Prediction {
            
    }
    
-   /** erzeugt basierend auf einer Messung n predictions, insbesondere eine bei endTime zum Vergleich mit einer neuen Messung
+   /** generates n predictions based on a measurement, including one at endTime for comparison with a new measurement
    *
    * @param n                                                                number of predictions
    * @param m1                                                        measurement basis for predictions
@@ -87,13 +92,14 @@ public class Prediction {
 	
 	/**
 	 *
-	 * @paramAnzahl der erzeugten Punkte
-	 *  container von dort wird die letzte Messung und Rate ausgelesen
-	 * @returneine Arraylist von berechneten Punkten, die den restlichen Wachstumsverlauf approximieren
-	 * Punkte sind zeitlich gleichmäßig verteilt
-	 *Der letzte Punkt ist bei finTime, also bis dorthin wird berechnet
-	 */
-	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalDateTime endTime) throws IllegalArgumentException, IllegalStateException{
+	 * @paramAnzahl number of predictions
+	 *  container used to read current growth rate and phase
+	 * @returneine Arraylist of Predictions, approximating the future growth
+	 * Points are evenly distributed
+	 * The last prediction is at endTime
+	 * @throws IllegalArgumentException if the container has less than two measurements or the growth rate is zero
+	 * */
+	public ArrayList<Prediction> createPred(int n, GrowthContainer con, LocalDateTime endTime) throws IllegalArgumentException{
 		int size=con.getMListSize();
 		double rate=con.getRate();
 		Measurement m1= con.getMeasure(size-1);
@@ -106,7 +112,7 @@ public class Prediction {
 	
 	
 	/**
-	 * Same thing as the previous one just with endTime=final Time (also wenn confluency~90%)
+	 * Same thing as the previous one just with endTime=final Time (confluency~90%)
 	 */
 	public ArrayList<Prediction> createPred(int n, GrowthContainer con) throws IllegalArgumentException, IllegalStateException{
 		/*
