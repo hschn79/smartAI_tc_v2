@@ -48,7 +48,7 @@ public class MonitoringController implements Initializable, PropertyChangeListen
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Time");
-		yAxis.setLabel("Confluency in %");
+		yAxis.setLabel("Confluency log");
 		//creating the chart
 		chartMonitoring = new LineChart<>(xAxis,yAxis);
 		chartMonitoring.setAnimated(false);

@@ -14,7 +14,7 @@ public class TemperatureController {
     @FXML
     private LineChart<String, Number> lineChart;
 
-    private int currentTemperature = 32;
+    private int currentTemperature = 31;
 
     /**
      * Set temperature in the diagram
