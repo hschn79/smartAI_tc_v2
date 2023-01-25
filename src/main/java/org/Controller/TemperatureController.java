@@ -1,4 +1,4 @@
-package org.example;
+package org.Controller;
 
 import calc.GrowthContainer;
 import javafx.fxml.FXML;

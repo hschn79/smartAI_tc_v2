@@ -5,6 +5,6 @@ module org.example {
 	requires java.desktop;
     requires org.jfree.jfreechart;
 
-    opens org.example to javafx.fxml;
-    exports org.example;
+    opens org.Controller to javafx.fxml;
+    exports org.Controller;
 }

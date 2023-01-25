@@ -1,4 +1,4 @@
-package org.example;
+package org.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

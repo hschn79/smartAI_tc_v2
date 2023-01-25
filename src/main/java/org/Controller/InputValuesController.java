@@ -1,4 +1,4 @@
-package org.example;
+package org.Controller;
 
 import ImageAnalysis.ImageJClass;
 import calc.GrowthContainer;
